@@ -1,0 +1,22 @@
+[
+  {"id": "bengaluru", "name": "Bengaluru", "name_kn": "ಬೆಂಗಳೂರು", "lat": 12.9716, "lng": 77.5946, "aliases": ["bangalore", "bengaluru", "blr"]},
+  {"id": "mysuru", "name": "Mysuru", "name_kn": "ಮೈಸೂರು", "lat": 12.2958, "lng": 76.6394, "aliases": ["mysore", "mysuru"]},
+  {"id": "mangaluru", "name": "Mangaluru", "name_kn": "ಮಂಗಳೂರು", "lat": 12.9141, "lng": 74.856, "aliases": ["mangalore", "mangaluru"]},
+  {"id": "hubballi", "name": "Hubballi", "name_kn": "ಹುಬ್ಬಳ್ಳಿ", "lat": 15.3647, "lng": 75.124, "aliases": ["hubli", "hubballi", "hubli-dharwad", "dharwad", "ಧಾರವಾಡ"]},
+  {"id": "belagavi", "name": "Belagavi", "name_kn": "ಬೆಳಗಾವಿ", "lat": 15.8497, "lng": 74.4977, "aliases": ["belgaum", "belagavi"]},
+  {"id": "kalaburagi", "name": "Kalaburagi", "name_kn": "ಕಲಬುರಗಿ", "lat": 17.3297, "lng": 76.8343, "aliases": ["gulbarga", "kalaburagi"]},
+  {"id": "ballari", "name": "Ballari", "name_kn": "ಬಳ್ಳಾರಿ", "lat": 15.1394, "lng": 76.9214, "aliases": ["bellary", "ballari"]},
+  {"id": "hosapete", "name": "Hosapete", "name_kn": "ಹೊಸಪೇಟೆ", "lat": 15.2689, "lng": 76.3909, "aliases": ["hospet", "hosapete"]},
+  {"id": "shivamogga", "name": "Shivamogga", "name_kn": "ಶಿವಮೊಗ್ಗ", "lat": 13.9299, "lng": 75.5681, "aliases": ["shimoga", "shivamogga"]},
+  {"id": "davanagere", "name": "Davanagere", "name_kn": "ದಾವಣಗೆರೆ", "lat": 14.4644, "lng": 75.9218, "aliases": ["davangere", "davanagere"]},
+  {"id": "tumakuru", "name": "Tumakuru", "name_kn": "ತುಮಕೂರು", "lat": 13.3379, "lng": 77.1173, "aliases": ["tumkur", "tumakuru"]},
+  {"id": "hassan", "name": "Hassan", "name_kn": "ಹಾಸನ", "lat": 13.0068, "lng": 76.1004, "aliases": ["hassan"]},
+  {"id": "udupi", "name": "Udupi", "name_kn": "ಉಡುಪಿ", "lat": 13.3409, "lng": 74.7421, "aliases": ["udupi"]},
+  {"id": "vijayapura", "name": "Vijayapura", "name_kn": "ವಿಜಯಪುರ", "lat": 16.8302, "lng": 75.71, "aliases": ["bijapur", "vijayapura"]},
+  {"id": "hyderabad", "name": "Hyderabad", "name_kn": "ಹೈದರಾಬಾದ್", "lat": 17.385, "lng": 78.4867, "aliases": ["hyderabad"]},
+  {"id": "chennai", "name": "Chennai", "name_kn": "ಚೆನ್ನೈ", "lat": 13.0827, "lng": 80.2707, "aliases": ["chennai", "madras"]},
+  {"id": "mumbai", "name": "Mumbai", "name_kn": "ಮುಂಬೈ", "lat": 19.076, "lng": 72.8777, "aliases": ["mumbai", "bombay"]},
+  {"id": "pune", "name": "Pune", "name_kn": "ಪುಣೆ", "lat": 18.5204, "lng": 73.8567, "aliases": ["pune"]},
+  {"id": "kochi", "name": "Kochi", "name_kn": "ಕೊಚ್ಚಿ", "lat": 9.9312, "lng": 76.2673, "aliases": ["cochin", "kochi"]},
+  {"id": "panaji", "name": "Panaji (Goa)", "name_kn": "ಪಣಜಿ", "lat": 15.4909, "lng": 73.8278, "aliases": ["goa", "panaji", "panjim"]}
+]

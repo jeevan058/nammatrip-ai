@@ -1,0 +1,177 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------
+   NammaTrip AI design tokens
+   Forest green and ivory carry the page. Turmeric (the yellow of the
+   Karnataka flag) is the only accent and is used sparingly.
+   ------------------------------------------------------------------ */
+@theme {
+  --color-forest: #173d2b;
+  --color-forest-deep: #0f2a1d;
+  --color-ivory: #f8f6f0;
+  --color-paper: #fdfcf8;
+  --color-sage: #dde6d9;
+  --color-sage-line: #c3d0be;
+  --color-turmeric: #d9a21b;
+  --color-ink: #16241c;
+  --color-ink-soft: #4a5a50;
+  --color-danger: #a33a1f;
+
+  /* Latin glyphs use Bricolage / Hanken; Kannada glyphs fall through to Noto. */
+  --font-display: "Bricolage Grotesque", "Noto Serif Kannada", ui-serif, serif;
+  --font-body: "Hanken Grotesk", "Noto Sans Kannada", ui-sans-serif, system-ui, sans-serif;
+  --font-kannada: "Noto Serif Kannada", ui-serif, serif;
+
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 24px;
+
+  --animate-rise: rise 900ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  --animate-fade: fade 1200ms ease-out 250ms both;
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(28px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes fade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+  }
+
+  body {
+    background: var(--color-ivory);
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+    line-height: 1.12;
+  }
+
+  /* Kannada glyphs are taller and need more room to avoid clipping. */
+  html[lang="kn"] body {
+    line-height: 1.8;
+  }
+  html[lang="kn"] h1,
+  html[lang="kn"] h2,
+  html[lang="kn"] h3,
+  html[lang="kn"] h4 {
+    letter-spacing: 0;
+    line-height: 1.35;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-turmeric);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background: var(--color-turmeric);
+    color: var(--color-forest-deep);
+  }
+
+  dialog::backdrop {
+    background: rgb(15 42 29 / 0.72);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-delay: 0ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+
+/* Numbered map pins (Leaflet divIcon). */
+.map-pin {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 3px solid var(--color-ivory);
+  box-shadow: 0 2px 6px rgb(15 42 29 / 0.35);
+  font: 700 0.95rem/1 var(--font-body);
+}
+.map-pin-stop {
+  background: var(--color-forest);
+  color: var(--color-ivory);
+}
+.map-pin-start {
+  background: var(--color-turmeric);
+  color: var(--color-forest-deep);
+}
+.leaflet-container {
+  font-family: var(--font-body);
+}
+
+/* Printing / "Save as PDF": only the itinerary is printed. */
+@media print {
+  body.print-trip header,
+  body.print-trip footer,
+  body.print-trip main > section:not(#result),
+  body.print-trip dialog,
+  .no-print,
+  .leaflet-control-zoom {
+    display: none !important;
+  }
+  body.print-trip #result {
+    background: white;
+    padding: 0;
+    border: 0;
+  }
+  /* Browsers drop background colours when printing; keep badges, pins and bars. */
+  body.print-trip,
+  body.print-trip * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  body.print-trip #result li,
+  body.print-trip #result aside {
+    break-inside: avoid;
+  }
+  body.print-trip #result h2,
+  body.print-trip #result h3 {
+    break-after: avoid;
+  }
+  body.print-trip #map-title ~ div {
+    break-inside: avoid;
+  }
+  body.print-trip aside {
+    position: static !important;
+  }
+}
