@@ -1,3 +1,4 @@
+
 import {
   Bike,
   Bus,
@@ -6,6 +7,7 @@ import {
   Drama,
   Flower2,
   Landmark,
+  MapPin,
   Mountain,
   PawPrint,
   RotateCcw,
@@ -13,6 +15,10 @@ import {
   Trees,
   Utensils,
   Waves,
+  CalendarDays,
+  Users,
+  Wallet,
+  Sparkles,
 } from 'lucide-react'
 import { useState, type FormEvent, type ReactNode } from 'react'
 import { useLanguage } from '../i18n/LanguageContext'
@@ -31,36 +37,23 @@ import {
 import { MultiChoice, SingleChoice } from './ChoiceGroup'
 
 const INTEREST_ICONS: Record<Interest, ReactNode> = {
-  nature: <Trees size={16} />,
-  heritage: <Landmark size={16} />,
-  beaches: <Waves size={16} />,
-  adventure: <Mountain size={16} />,
-  wildlife: <PawPrint size={16} />,
-  food: <Utensils size={16} />,
-  culture: <Drama size={16} />,
-  photography: <Camera size={16} />,
-  spiritual: <Flower2 size={16} />,
+  nature: <Trees size={18} />,
+  heritage: <Landmark size={18} />,
+  beaches: <Waves size={18} />,
+  adventure: <Mountain size={18} />,
+  wildlife: <PawPrint size={18} />,
+  food: <Utensils size={18} />,
+  culture: <Drama size={18} />,
+  photography: <Camera size={18} />,
+  spiritual: <Flower2 size={18} />,
 }
 
 const TRANSPORT_ICONS: Record<Transport, ReactNode> = {
-  bus: <Bus size={16} />,
-  train: <TrainFront size={16} />,
-  car: <Car size={16} />,
-  'two-wheeler': <Bike size={16} />,
+  bus: <Bus size={18} />,
+  train: <TrainFront size={18} />,
+  car: <Car size={18} />,
+  'two-wheeler': <Bike size={18} />,
 }
-
-const START_CITIES = [
-  'Bengaluru',
-  'Mysuru',
-  'Mangaluru',
-  'Hubballi',
-  'Belagavi',
-  'Kalaburagi',
-  'Hyderabad',
-  'Chennai',
-  'Mumbai',
-  'Goa',
-]
 
 interface FormState {
   startCity: string
@@ -88,20 +81,39 @@ const INITIAL: FormState = {
 }
 
 function wholeNumber(text: string): number | null {
-  if (!/^\d+$/.test(text.trim())) return null
-  return Number(text)
+  const trimmed = text.trim()
+  if (!/^\d+$/.test(trimmed)) return null
+
+  const value = Number(trimmed)
+  return Number.isSafeInteger(value) ? value : null
 }
 
 function validate(form: FormState): Errors {
   const errors: Errors = {}
-  if (form.startCity.trim().length < 2) errors.startCity = true
+
+  if (form.startCity.trim().length < 2) {
+    errors.startCity = true
+  }
+
   const days = wholeNumber(form.days)
-  if (days === null || days < 1 || days > 10) errors.days = true
+  if (days === null || days < 1 || days > 10) {
+    errors.days = true
+  }
+
   const travellers = wholeNumber(form.travellers)
-  if (travellers === null || travellers < 1 || travellers > 12) errors.travellers = true
+  if (travellers === null || travellers < 1 || travellers > 12) {
+    errors.travellers = true
+  }
+
   const budget = wholeNumber(form.budget)
-  if (budget === null || budget < 1000 || budget > 1_000_000) errors.budget = true
-  if (form.interests.length === 0) errors.interests = true
+  if (budget === null || budget < 1000 || budget > 1_000_000) {
+    errors.budget = true
+  }
+
+  if (form.interests.length === 0) {
+    errors.interests = true
+  }
+
   return errors
 }
 
@@ -112,50 +124,77 @@ const FIRST_FIELD_IDS: Record<ErrorKey, string> = {
   budget: 'budget',
   interests: 'interests-first',
 }
-const FIELD_ORDER: ErrorKey[] = ['startCity', 'days', 'travellers', 'budget', 'interests']
+
+const FIELD_ORDER: ErrorKey[] = [
+  'startCity',
+  'days',
+  'travellers',
+  'budget',
+  'interests',
+]
 
 const inputClass =
-  'w-full rounded-sm border border-sage-line bg-ivory px-3.5 py-2.5 text-base text-ink placeholder:text-ink-soft/60 ' +
-  'transition-colors hover:border-forest focus:border-forest aria-[invalid=true]:border-danger'
+  'w-full rounded-xl border border-[#DCE3D8] bg-white px-4 py-3 text-base text-[#183A2B] outline-none transition duration-200 placeholder:text-[#849087] hover:border-[#8FA493] focus:border-[#28553D] focus:ring-4 focus:ring-[#28553D]/10 aria-[invalid=true]:border-red-500'
 
 function Field({
   id,
   label,
   hint,
   error,
+  icon,
   children,
 }: {
   id: string
   label: string
   hint?: string
   error?: string
+  icon?: ReactNode
   children: ReactNode
 }) {
   return (
-    <div>
-      <label htmlFor={id} className="mb-1.5 block text-[0.95rem] font-semibold text-ink">
+    <div className="min-w-0">
+      <label
+        htmlFor={id}
+        className="mb-2 flex items-center gap-2 text-sm font-semibold text-[#21392D]"
+      >
+        {icon && <span className="text-[#52745B]">{icon}</span>}
         {label}
       </label>
+
       {children}
+
       {error ? (
-        <p id={`${id}-error`} role="alert" className="mt-1.5 text-sm font-medium text-danger">
+        <p
+          id={`${id}-error`}
+          role="alert"
+          className="mt-2 text-sm font-medium text-red-700"
+        >
           {error}
         </p>
       ) : (
-        hint && <p className="mt-1.5 text-sm text-ink-soft">{hint}</p>
+        hint && (
+          <p className="mt-2 text-xs leading-relaxed text-[#758176]">
+            {hint}
+          </p>
+        )
       )}
     </div>
   )
 }
 
-export function PlannerForm({ onSubmit }: { onSubmit: (request: TripRequest) => void }) {
+export function PlannerForm({
+  onSubmit,
+}: {
+  onSubmit: (request: TripRequest) => void
+}) {
   const { lang, t } = useLanguage()
   const [form, setForm] = useState<FormState>(INITIAL)
-  const [planLang, setPlanLang] = useState<Lang | null>(null) // null = follow interface language
+  const [planLang, setPlanLang] = useState<Lang | null>(null)
   const [errors, setErrors] = useState<Errors>({})
   const [attempted, setAttempted] = useState(false)
 
   const effectiveLang = planLang ?? lang
+
   const errorText: Record<ErrorKey, string> = {
     startCity: t.form.errors.startCity,
     days: t.form.errors.days,
@@ -167,32 +206,40 @@ export function PlannerForm({ onSubmit }: { onSubmit: (request: TripRequest) => 
   function update<K extends keyof FormState>(key: K, value: FormState[K]) {
     const next = { ...form, [key]: value }
     setForm(next)
-    if (attempted) setErrors(validate(next)) // re-check live once the user has tried to submit
+
+    if (attempted) setErrors(validate(next))
   }
 
   function toggleInterest(interest: Interest) {
     const has = form.interests.includes(interest)
+
     update(
       'interests',
-      has ? form.interests.filter((i) => i !== interest) : [...form.interests, interest],
+      has
+        ? form.interests.filter((item) => item !== interest)
+        : [...form.interests, interest],
     )
   }
 
   function handleSubmit(event: FormEvent) {
     event.preventDefault()
     setAttempted(true)
+
     const found = validate(form)
     setErrors(found)
+
     const firstBad = FIELD_ORDER.find((key) => found[key])
+
     if (firstBad) {
       document.getElementById(FIRST_FIELD_IDS[firstBad])?.focus()
       return
     }
+
     onSubmit({
       start_city: form.startCity.trim(),
-      days: Number(form.days),
-      travellers: Number(form.travellers),
-      budget_inr: Number(form.budget),
+      days: wholeNumber(form.days)!,
+      travellers: wholeNumber(form.travellers)!,
+      budget_inr: wholeNumber(form.budget)!,
       interests: form.interests,
       style: form.style,
       transport: form.transport,
@@ -211,189 +258,372 @@ export function PlannerForm({ onSubmit }: { onSubmit: (request: TripRequest) => 
   const hasErrors = Object.keys(errors).length > 0
 
   return (
-    <section id="plan" className="scroll-mt-16 bg-ivory py-16 sm:py-24">
-      <div className="mx-auto grid max-w-7xl gap-10 px-5 sm:px-8 lg:grid-cols-[0.8fr_1.6fr] lg:gap-16">
-        <div className="lg:sticky lg:top-24 lg:self-start">
-          <h2 className="text-3xl font-semibold sm:text-4xl">{t.form.title}</h2>
-          <p className="mt-4 max-w-[44ch] text-ink-soft">{t.form.intro}</p>
+    <section
+      id="plan"
+      className="relative scroll-mt-16 overflow-hidden bg-[#F7F6F0] py-16 sm:py-24 lg:py-28"
+    >
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-28 top-24 size-80 rounded-full bg-[#DDE6D9]/50 blur-3xl"
+      />
+
+      <div className="relative mx-auto max-w-7xl px-5 sm:px-8">
+        <div className="mb-10 max-w-3xl sm:mb-14">
+          <p className="mb-4 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.22em] text-[#52745B]">
+            <span className="h-px w-8 bg-[#D9A21B]" />
+            YOUR JOURNEY, YOUR WAY
+          </p>
+
+          <h2 className="max-w-2xl text-4xl font-semibold leading-[1.08] tracking-tight text-[#173D2B] sm:text-5xl lg:text-6xl">
+            {t.form.title}
+          </h2>
+
+          <p className="mt-5 max-w-2xl text-base leading-7 text-[#647267] sm:text-lg">
+            {t.form.intro}
+          </p>
         </div>
 
-        <form
-          noValidate
-          onSubmit={handleSubmit}
-          className="rounded-lg border border-sage-line bg-paper p-6 sm:p-9"
-        >
-          <div className="space-y-9">
-            <div>
-              <h3 className="mb-4 text-xl font-semibold">{t.form.groupWhere}</h3>
-              <div className="grid gap-5 sm:grid-cols-2">
-                <div className="sm:col-span-2">
-                  <Field
-                    id="start-city"
-                    label={t.form.startCity}
-                    hint={t.form.startCityHint}
-                    error={errors.startCity ? errorText.startCity : undefined}
-                  >
-                    <input
-                      id="start-city"
-                      list="start-city-options"
-                      autoComplete="off"
-                      value={form.startCity}
-                      onChange={(e) => update('startCity', e.target.value)}
-                      aria-invalid={errors.startCity ? true : undefined}
-                      aria-describedby={errors.startCity ? 'start-city-error' : undefined}
-                      className={inputClass}
-                    />
-                    <datalist id="start-city-options">
-                      {START_CITIES.map((city) => (
-                        <option key={city} value={city} />
-                      ))}
-                    </datalist>
-                  </Field>
+        <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_300px] lg:gap-8">
+          <form
+            noValidate
+            onSubmit={handleSubmit}
+            className="min-w-0 rounded-3xl border border-[#E1E5DC] bg-white p-5 shadow-[0_16px_60px_rgba(23,61,43,0.06)] sm:p-8 lg:p-10"
+          >
+            <div className="space-y-10">
+              <section aria-labelledby="trip-basics-heading">
+                <div className="mb-6 flex items-start gap-4">
+                  <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-[#E7EEE5] text-[#28553D]">
+                    <MapPin size={21} />
+                  </span>
+
+                  <div>
+                    <h3
+                      id="trip-basics-heading"
+                      className="text-xl font-semibold text-[#173D2B] sm:text-2xl"
+                    >
+                      {t.form.groupWhere}
+                    </h3>
+                    <p className="mt-1 text-sm text-[#788379]">
+                      Start with the basics of your journey.
+                    </p>
+                  </div>
                 </div>
-                <Field
-                  id="days"
-                  label={t.form.days}
-                  error={errors.days ? errorText.days : undefined}
-                >
-                  <input
-                    id="days"
-                    type="number"
-                    inputMode="numeric"
-                    min={1}
-                    max={10}
-                    value={form.days}
-                    onChange={(e) => update('days', e.target.value)}
-                    aria-invalid={errors.days ? true : undefined}
-                    aria-describedby={errors.days ? 'days-error' : undefined}
-                    className={inputClass}
-                  />
-                </Field>
-                <Field
-                  id="travellers"
-                  label={t.form.travellers}
-                  error={errors.travellers ? errorText.travellers : undefined}
-                >
-                  <input
-                    id="travellers"
-                    type="number"
-                    inputMode="numeric"
-                    min={1}
-                    max={12}
-                    value={form.travellers}
-                    onChange={(e) => update('travellers', e.target.value)}
-                    aria-invalid={errors.travellers ? true : undefined}
-                    aria-describedby={errors.travellers ? 'travellers-error' : undefined}
-                    className={inputClass}
-                  />
-                </Field>
-                <div className="sm:col-span-2">
+
+                <div className="grid gap-5 sm:grid-cols-2">
+                  <div className="sm:col-span-2">
+                    <Field
+                      id="start-city"
+                      label={t.form.startCity}
+                      hint="Enter any city, town, village or starting location."
+                      error={errors.startCity ? errorText.startCity : undefined}
+                      icon={<MapPin size={16} />}
+                    >
+                      <input
+                        id="start-city"
+                        type="text"
+                        autoComplete="off"
+                        value={form.startCity}
+                        onChange={(event) =>
+                          update('startCity', event.target.value)
+                        }
+                        aria-invalid={errors.startCity ? true : undefined}
+                        aria-describedby={
+                          errors.startCity ? 'start-city-error' : undefined
+                        }
+                        placeholder="e.g. Bengaluru, Hassan, or your town"
+                        className={inputClass}
+                      />
+                    </Field>
+                  </div>
+
                   <Field
-                    id="budget"
-                    label={t.form.budget}
-                    hint={t.form.budgetHint}
-                    error={errors.budget ? errorText.budget : undefined}
+                    id="days"
+                    label={t.form.days}
+                    hint="Choose between 1 and 10 days."
+                    error={errors.days ? errorText.days : undefined}
+                    icon={<CalendarDays size={16} />}
                   >
                     <input
-                      id="budget"
+                      id="days"
                       type="number"
                       inputMode="numeric"
-                      min={1000}
-                      step={500}
-                      placeholder="8000"
-                      value={form.budget}
-                      onChange={(e) => update('budget', e.target.value)}
-                      aria-invalid={errors.budget ? true : undefined}
-                      aria-describedby={errors.budget ? 'budget-error' : undefined}
+                      min={1}
+                      max={10}
+                      step={1}
+                      value={form.days}
+                      onChange={(event) => update('days', event.target.value)}
+                      aria-invalid={errors.days ? true : undefined}
+                      aria-describedby={errors.days ? 'days-error' : undefined}
                       className={inputClass}
                     />
                   </Field>
+
+                  <Field
+                    id="travellers"
+                    label={t.form.travellers}
+                    hint="Choose between 1 and 12 travellers."
+                    error={
+                      errors.travellers ? errorText.travellers : undefined
+                    }
+                    icon={<Users size={16} />}
+                  >
+                    <input
+                      id="travellers"
+                      type="number"
+                      inputMode="numeric"
+                      min={1}
+                      max={12}
+                      step={1}
+                      value={form.travellers}
+                      onChange={(event) =>
+                        update('travellers', event.target.value)
+                      }
+                      aria-invalid={errors.travellers ? true : undefined}
+                      aria-describedby={
+                        errors.travellers ? 'travellers-error' : undefined
+                      }
+                      className={inputClass}
+                    />
+                  </Field>
+
+                  <div className="sm:col-span-2">
+                    <Field
+                      id="budget"
+                      label={t.form.budget}
+                      hint="Total trip budget: ₹1,000 to ₹10,00,000."
+                      error={errors.budget ? errorText.budget : undefined}
+                      icon={<Wallet size={16} />}
+                    >
+                      <div className="relative">
+                        <span className="pointer-events-none absolute inset-y-0 left-4 flex items-center font-semibold text-[#52745B]">
+                          ₹
+                        </span>
+
+                        <input
+                          id="budget"
+                          type="number"
+                          inputMode="numeric"
+                          min={1000}
+                          max={1000000}
+                          step={1}
+                          placeholder="e.g. 8000"
+                          value={form.budget}
+                          onChange={(event) =>
+                            update('budget', event.target.value)
+                          }
+                          aria-invalid={errors.budget ? true : undefined}
+                          aria-describedby={
+                            errors.budget ? 'budget-error' : undefined
+                          }
+                          className={`${inputClass} pl-9`}
+                        />
+                      </div>
+                    </Field>
+                  </div>
+                </div>
+              </section>
+
+              <div className="h-px bg-[#E8ECE5]" />
+
+              <section
+                aria-labelledby="trip-interests-heading"
+                className="space-y-7"
+              >
+                <div className="flex items-start gap-4">
+                  <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-[#F7EDD4] text-[#86631A]">
+                    <Sparkles size={21} />
+                  </span>
+
+                  <div>
+                    <h3
+                      id="trip-interests-heading"
+                      className="text-xl font-semibold text-[#173D2B] sm:text-2xl"
+                    >
+                      {t.form.groupLike}
+                    </h3>
+                    <p className="mt-1 text-sm text-[#788379]">
+                      Pick what makes a trip memorable for you.
+                    </p>
+                  </div>
+                </div>
+
+                <MultiChoice
+                  name="interests"
+                  legend={t.form.interests}
+                  hint={t.form.interestsHint}
+                  options={INTERESTS.map((value) => ({
+                    value,
+                    label: t.interests[value],
+                    icon: INTEREST_ICONS[value],
+                  }))}
+                  values={form.interests}
+                  onToggle={toggleInterest}
+                  error={errors.interests ? errorText.interests : undefined}
+                  errorId="interests-error"
+                />
+
+                <SingleChoice
+                  name="style"
+                  legend={t.form.style}
+                  options={STYLES.map((value) => ({
+                    value,
+                    label: t.styles[value],
+                  }))}
+                  value={form.style}
+                  onChange={(value) => update('style', value)}
+                />
+              </section>
+
+              <div className="h-px bg-[#E8ECE5]" />
+
+              <section
+                aria-labelledby="trip-logistics-heading"
+                className="space-y-7"
+              >
+                <div className="flex items-start gap-4">
+                  <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-[#E7EEE5] text-[#28553D]">
+                    <Bus size={21} />
+                  </span>
+
+                  <div>
+                    <h3
+                      id="trip-logistics-heading"
+                      className="text-xl font-semibold text-[#173D2B] sm:text-2xl"
+                    >
+                      {t.form.groupTravel}
+                    </h3>
+                    <p className="mt-1 text-sm text-[#788379]">
+                      Choose how you want to explore.
+                    </p>
+                  </div>
+                </div>
+
+                <SingleChoice
+                  name="transport"
+                  legend={t.form.transport}
+                  options={TRANSPORTS.map((value) => ({
+                    value,
+                    label: t.transports[value],
+                    icon: TRANSPORT_ICONS[value],
+                  }))}
+                  value={form.transport}
+                  onChange={(value) => update('transport', value)}
+                />
+
+                <SingleChoice
+                  name="accommodation"
+                  legend={t.form.accommodation}
+                  options={ACCOMMODATIONS.map((value) => ({
+                    value,
+                    label: t.accommodations[value],
+                  }))}
+                  value={form.accommodation}
+                  onChange={(value) => update('accommodation', value)}
+                />
+
+                <SingleChoice
+                  name="plan-language"
+                  legend={t.form.language}
+                  options={(['en', 'kn'] as Lang[]).map((value) => ({
+                    value,
+                    label: t.languages[value],
+                    lang: value,
+                  }))}
+                  value={effectiveLang}
+                  onChange={setPlanLang}
+                />
+              </section>
+            </div>
+
+            {hasErrors && (
+              <p
+                role="alert"
+                className="mt-8 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-800"
+              >
+                {t.form.errors.summary}
+              </p>
+            )}
+
+            <div className="mt-10 flex flex-col gap-3 border-t border-[#E8ECE5] pt-6 sm:flex-row sm:items-center">
+              <button
+                type="submit"
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#173D2B] px-7 py-3.5 text-base font-semibold text-white shadow-sm transition duration-200 hover:-translate-y-0.5 hover:bg-[#0F2A1D] hover:shadow-lg focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#173D2B]/20"
+              >
+                <Sparkles size={18} />
+                {t.form.submit}
+              </button>
+
+              <button
+                type="button"
+                onClick={reset}
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-5 py-3.5 text-sm font-semibold text-[#647267] transition hover:bg-[#F2F4EF] hover:text-[#173D2B] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#173D2B]/15"
+              >
+                <RotateCcw size={16} />
+                {t.form.reset}
+              </button>
+            </div>
+          </form>
+
+          <aside className="space-y-4 lg:sticky lg:top-24">
+            <div className="overflow-hidden rounded-3xl bg-[#173D2B] p-6 text-[#F8F6F0] sm:p-7">
+              <div className="mb-5 flex size-12 items-center justify-center rounded-2xl bg-white/10 text-[#E7C46A]">
+                <Sparkles size={23} />
+              </div>
+
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#D9C991]">
+                YOUR NEXT ADVENTURE
+              </p>
+
+              <h3 className="mt-3 text-2xl font-semibold leading-tight">
+                Karnataka, made personal.
+              </h3>
+
+              <p className="mt-3 text-sm leading-6 text-white/75">
+                Tell us what you love. We’ll help shape a journey around your
+                time, budget and travel style.
+              </p>
+
+              <div className="mt-6 space-y-4 border-t border-white/15 pt-5">
+                <div className="flex items-center gap-3 text-sm text-white/85">
+                  <MapPin size={17} className="shrink-0 text-[#E7C46A]" />
+                  <span className="break-words">
+                    {form.startCity.trim() || 'Your starting point'}
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-3 text-sm text-white/85">
+                  <CalendarDays
+                    size={17}
+                    className="shrink-0 text-[#E7C46A]"
+                  />
+                  {form.days || '—'} days to explore
+                </div>
+
+                <div className="flex items-center gap-3 text-sm text-white/85">
+                  <Users size={17} className="shrink-0 text-[#E7C46A]" />
+                  {form.travellers || '—'} travellers
+                </div>
+
+                <div className="flex items-center gap-3 text-sm text-white/85">
+                  <Wallet size={17} className="shrink-0 text-[#E7C46A]" />
+                  {form.budget
+                    ? `₹${Number(form.budget).toLocaleString('en-IN')}`
+                    : 'Set your budget'}
                 </div>
               </div>
             </div>
 
-            <div className="space-y-6">
-              <h3 className="text-xl font-semibold">{t.form.groupLike}</h3>
-              <MultiChoice
-                name="interests"
-                legend={t.form.interests}
-                hint={t.form.interestsHint}
-                options={INTERESTS.map((value) => ({
-                  value,
-                  label: t.interests[value],
-                  icon: INTEREST_ICONS[value],
-                }))}
-                values={form.interests}
-                onToggle={toggleInterest}
-                error={errors.interests ? errorText.interests : undefined}
-                errorId="interests-error"
-              />
-              <SingleChoice
-                name="style"
-                legend={t.form.style}
-                options={STYLES.map((value) => ({ value, label: t.styles[value] }))}
-                value={form.style}
-                onChange={(v) => update('style', v)}
-              />
+            <div className="rounded-2xl border border-[#E1E5DC] bg-white p-5">
+              <p className="text-sm font-semibold text-[#173D2B]">
+                A little more you, a little less guesswork.
+              </p>
+              <p className="mt-2 text-sm leading-6 text-[#758176]">
+                Your choices help personalise the itinerary and its estimated
+                trip budget.
+              </p>
             </div>
-
-            <div className="space-y-6">
-              <h3 className="text-xl font-semibold">{t.form.groupTravel}</h3>
-              <SingleChoice
-                name="transport"
-                legend={t.form.transport}
-                options={TRANSPORTS.map((value) => ({
-                  value,
-                  label: t.transports[value],
-                  icon: TRANSPORT_ICONS[value],
-                }))}
-                value={form.transport}
-                onChange={(v) => update('transport', v)}
-              />
-              <SingleChoice
-                name="accommodation"
-                legend={t.form.accommodation}
-                options={ACCOMMODATIONS.map((value) => ({ value, label: t.accommodations[value] }))}
-                value={form.accommodation}
-                onChange={(v) => update('accommodation', v)}
-              />
-              <SingleChoice
-                name="plan-language"
-                legend={t.form.language}
-                options={(['en', 'kn'] as Lang[]).map((value) => ({
-                  value,
-                  label: t.languages[value],
-                  lang: value,
-                }))}
-                value={effectiveLang}
-                onChange={setPlanLang}
-              />
-            </div>
-          </div>
-
-          {hasErrors && (
-            <p role="alert" className="mt-8 rounded-sm bg-danger/10 px-4 py-3 text-sm font-medium text-danger">
-              {t.form.errors.summary}
-            </p>
-          )}
-
-          <div className="mt-8 flex flex-wrap items-center gap-3">
-            <button
-              type="submit"
-              className="rounded-full bg-forest px-8 py-3.5 text-base font-semibold text-ivory transition-colors hover:bg-forest-deep"
-            >
-              {t.form.submit}
-            </button>
-            <button
-              type="button"
-              onClick={reset}
-              className="inline-flex items-center gap-2 rounded-full px-5 py-3.5 text-base font-medium text-ink-soft transition-colors hover:text-forest"
-            >
-              <RotateCcw size={16} />
-              {t.form.reset}
-            </button>
-          </div>
-        </form>
+          </aside>
+        </div>
       </div>
     </section>
   )

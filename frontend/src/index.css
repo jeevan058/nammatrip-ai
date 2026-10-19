@@ -1,10 +1,6 @@
 @import "tailwindcss";
 
-/* ------------------------------------------------------------------
-   NammaTrip AI design tokens
-   Forest green and ivory carry the page. Turmeric (the yellow of the
-   Karnataka flag) is the only accent and is used sparingly.
-   ------------------------------------------------------------------ */
+/* NammaTrip AI design tokens */
 @theme {
   --color-forest: #173d2b;
   --color-forest-deep: #0f2a1d;
@@ -17,7 +13,6 @@
   --color-ink-soft: #4a5a50;
   --color-danger: #a33a1f;
 
-  /* Latin glyphs use Bricolage / Hanken; Kannada glyphs fall through to Noto. */
   --font-display: "Bricolage Grotesque", "Noto Serif Kannada", ui-serif, serif;
   --font-body: "Hanken Grotesk", "Noto Sans Kannada", ui-sans-serif, system-ui, sans-serif;
   --font-kannada: "Noto Serif Kannada", ui-serif, serif;
@@ -34,15 +29,18 @@
       opacity: 0;
       transform: translateY(28px);
     }
+
     to {
       opacity: 1;
       transform: none;
     }
   }
+
   @keyframes fade {
     from {
       opacity: 0;
     }
+
     to {
       opacity: 1;
     }
@@ -74,10 +72,10 @@
     line-height: 1.12;
   }
 
-  /* Kannada glyphs are taller and need more room to avoid clipping. */
   html[lang="kn"] body {
     line-height: 1.8;
   }
+
   html[lang="kn"] h1,
   html[lang="kn"] h2,
   html[lang="kn"] h3,
@@ -105,6 +103,7 @@
     html {
       scroll-behavior: auto;
     }
+
     *,
     *::before,
     *::after {
@@ -115,63 +114,357 @@
   }
 }
 
+/* ------------------------------------------------------------------
+   BUTTON SYSTEM
+   Shared by the hero, forms and other sections.
+   ------------------------------------------------------------------ */
 
-/* Numbered map pins (Leaflet divIcon). */
+.btn {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  border: 1px solid transparent;
+  border-radius: 9999px;
+  padding: 0.8rem 1.35rem;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    color 200ms ease,
+    background-color 200ms ease,
+    border-color 200ms ease,
+    box-shadow 200ms ease,
+    transform 200ms ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+  transform: none;
+}
+
+.btn-accent {
+  background: var(--color-turmeric);
+  color: var(--color-forest-deep);
+  box-shadow: 0 5px 18px rgb(15 42 29 / 0.15);
+}
+
+.btn-accent:hover {
+  background: #e7b42f;
+  box-shadow: 0 8px 24px rgb(15 42 29 / 0.22);
+}
+
+.btn-primary {
+  background: var(--color-forest);
+  color: var(--color-ivory);
+}
+
+.btn-primary:hover {
+  background: var(--color-forest-deep);
+}
+
+.btn-outline {
+  border-color: var(--color-forest);
+  background: transparent;
+  color: var(--color-forest);
+}
+
+.btn-outline:hover {
+  background: var(--color-forest);
+  color: var(--color-ivory);
+}
+
+.btn-outline-light {
+  border-color: rgb(248 246 240 / 0.55);
+  background: rgb(248 246 240 / 0.04);
+  color: var(--color-ivory);
+}
+
+.btn-outline-light:hover {
+  border-color: var(--color-ivory);
+  background: rgb(248 246 240 / 0.12);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--color-forest);
+}
+
+.btn-ghost:hover {
+  background: var(--color-sage);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn {
+    transition: none;
+  }
+
+  .btn:hover,
+  .btn:active {
+    transform: none;
+  }
+}
+
+/* ------------------------------------------------------------------
+   CINEMATIC HERO
+   ------------------------------------------------------------------ */
+
+.hero-cinema {
+  isolation: isolate;
+}
+
+.hero-parallax {
+  transform: translate3d(0, var(--hero-parallax-y, 0px), 0);
+  will-change: transform;
+}
+
+.hero-route {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: hero-route-draw 2.8s cubic-bezier(0.55, 0, 0.25, 1) 300ms both;
+}
+
+.hero-origin {
+  transform-box: fill-box;
+  transform-origin: center;
+  opacity: 0;
+  animation: hero-origin-appear 550ms ease-out 1.8s both;
+}
+
+.hero-stop {
+  transform-box: fill-box;
+  transform-origin: center;
+  opacity: 0;
+  animation: hero-stop-appear 550ms ease-out 1.2s both;
+}
+
+.hero-pin {
+  opacity: 0;
+  animation: hero-pin-appear 700ms ease-out 2s both;
+}
+
+@keyframes hero-route-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes hero-origin-appear {
+  0% {
+    opacity: 0;
+    transform: scale(0.65);
+  }
+
+  70% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes hero-stop-appear {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes hero-pin-appear {
+  from {
+    opacity: 0;
+    filter: blur(2px);
+  }
+
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+/* ------------------------------------------------------------------
+   JOURNEY ROAD
+   ------------------------------------------------------------------ */
+
+.journey-road {
+  position: relative;
+  isolation: isolate;
+}
+
+.journey-road::before {
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: 1.375rem;
+  border-left: 2px dotted var(--color-sage-line);
+  content: "";
+  pointer-events: none;
+}
+
+.journey-stop {
+  position: relative;
+  min-width: 0;
+}
+
+.journey-index {
+  box-sizing: border-box;
+  box-shadow: 0 0 0 5px var(--color-ivory);
+}
+
+.route-rule {
+  height: 1px;
+  background-image: repeating-linear-gradient(to right,
+      var(--color-sage-line) 0,
+      var(--color-sage-line) 4px,
+      transparent 4px,
+      transparent 10px);
+}
+
+@media (min-width: 640px) {
+  .journey-road::before {
+    left: 2.75rem;
+  }
+
+  .journey-index {
+    box-shadow: 0 0 0 7px var(--color-ivory);
+  }
+}
+
+/* Respect reduced-motion preferences. */
+@media (prefers-reduced-motion: reduce) {
+
+  .hero-route,
+  .hero-origin,
+  .hero-stop,
+  .hero-pin {
+    animation: none !important;
+    opacity: 1;
+    filter: none;
+    stroke-dashoffset: 0;
+  }
+
+  .hero-parallax {
+    transform: none;
+    will-change: auto;
+  }
+}
+
+/* Numbered map pins. */
 .map-pin {
   display: grid;
   place-items: center;
   width: 34px;
   height: 34px;
-  border-radius: 50%;
   border: 3px solid var(--color-ivory);
+  border-radius: 50%;
   box-shadow: 0 2px 6px rgb(15 42 29 / 0.35);
   font: 700 0.95rem/1 var(--font-body);
 }
+
 .map-pin-stop {
   background: var(--color-forest);
   color: var(--color-ivory);
 }
+
 .map-pin-start {
   background: var(--color-turmeric);
   color: var(--color-forest-deep);
 }
+
 .leaflet-container {
   font-family: var(--font-body);
 }
 
-/* Printing / "Save as PDF": only the itinerary is printed. */
+/* Print support: retain only the itinerary. */
 @media print {
+
   body.print-trip header,
   body.print-trip footer,
-  body.print-trip main > section:not(#result),
+  body.print-trip main>section:not(#result),
   body.print-trip dialog,
   .no-print,
   .leaflet-control-zoom {
     display: none !important;
   }
+
   body.print-trip #result {
     background: white;
     padding: 0;
     border: 0;
   }
-  /* Browsers drop background colours when printing; keep badges, pins and bars. */
+
   body.print-trip,
   body.print-trip * {
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
+
   body.print-trip #result li,
   body.print-trip #result aside {
     break-inside: avoid;
   }
+
   body.print-trip #result h2,
   body.print-trip #result h3 {
     break-after: avoid;
   }
-  body.print-trip #map-title ~ div {
+
+  body.print-trip #map-title~div {
     break-inside: avoid;
   }
+
   body.print-trip aside {
     position: static !important;
+  }
+}
+
+/* Premium NammaTrip hero slideshow */
+.hero-slideshow-image {
+  opacity: 1;
+  animation: hero-image-crossfade 1.6s ease-in-out both;
+  will-change: opacity;
+}
+
+.hero-slideshow-static {
+  animation: none;
+}
+
+@keyframes hero-image-crossfade {
+  from {
+    opacity: 0.35;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-slideshow-image {
+    animation: none;
+    will-change: auto;
   }
 }
