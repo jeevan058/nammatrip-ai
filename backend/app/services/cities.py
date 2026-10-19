@@ -1,7 +1,9 @@
-"""Resolve the traveller's starting city to coordinates."""
+
+"""Resolve a traveller's starting location to coordinates."""
 
 import json
 import re
+import unicodedata
 from functools import lru_cache
 from pathlib import Path
 
@@ -17,38 +19,80 @@ def _cities() -> tuple[dict, ...]:
         return tuple(json.load(handle))
 
 
-# Kannada dependent vowel signs. A place name loses its final one when a suffix is added:
-# ಮೈಸೂರು (Mysuru) -> ಮೈಸೂರಿನಿಂದ (from Mysuru). So we match on the name without it.
-_VOWEL_SIGNS = "\u0cbe\u0cbf\u0cc0\u0cc1\u0cc2\u0cc6\u0cc7\u0cc8\u0cca\u0ccb\u0ccc"
-
-
-def _stem(name: str) -> str:
-    return name.rstrip(_VOWEL_SIGNS)
-
-
 def _normalise(text: str) -> str:
-    return re.sub(r"[^\wಀ-೿ ]+", " ", text.lower()).strip()
+    """Normalise English and Kannada names without corrupting Unicode."""
+    text = unicodedata.normalize("NFC", text).casefold()
+    text = re.sub(r"[^\w\s]", " ", text, flags=re.UNICODE)
+    return " ".join(text.split())
+
+
+def _make_start(city: dict, assumed: bool = False) -> StartPoint:
+    return StartPoint(
+        name=city["name"],
+        name_kn=city.get("name_kn"),
+        lat=city["lat"],
+        lng=city["lng"],
+        assumed=assumed,
+    )
 
 
 def resolve_start(text: str) -> StartPoint:
-    """Match free text such as "Bangalore, India" or "ಮೈಸೂರು" to a known city.
+    """
+    Resolve a free-text starting location using the local city database.
 
-    Unknown cities fall back to Bengaluru and are flagged with assumed=True so the
-    caller can tell the traveller instead of silently guessing.
+    Recognises city names, aliases, English names and Kannada names.
+    Unknown locations still use the configured fallback and are flagged
+    with assumed=True.
     """
     cities = _cities()
     needle = _normalise(text)
-    words = set(needle.split())
 
-    for city in cities:
-        names = {_normalise(city["name"]), city["name_kn"], *city["aliases"]}
-        if needle in names or words & names:
-            return StartPoint(name=city["name"], name_kn=city["name_kn"], lat=city["lat"], lng=city["lng"])
-        # Kannada suffixes ("ಮೈಸೂರಿನಿಂದ") are attached to the name, so also try a prefix match.
-        if any(needle.startswith(_stem(name)) for name in names if len(_stem(name)) >= 3):
-            return StartPoint(name=city["name"], name_kn=city["name_kn"], lat=city["lat"], lng=city["lng"])
+    # Remove common country suffixes without changing the place name.
+    for suffix in (", india", " india"):
+        if needle.endswith(suffix):
+            needle = needle[: -len(suffix)].strip()
+            break
 
-    default = next(c for c in cities if c["id"] == DEFAULT_CITY_ID)
-    return StartPoint(
-        name=default["name"], name_kn=default["name_kn"], lat=default["lat"], lng=default["lng"], assumed=True
+    if needle:
+        # Prefer exact matches before trying partial matches.
+        for city in cities:
+            names = [
+                city.get("name", ""),
+                city.get("name_kn", ""),
+                *city.get("aliases", []),
+            ]
+            normalised_names = {
+                _normalise(name) for name in names if isinstance(name, str) and name.strip()
+            }
+
+            if needle in normalised_names:
+                return _make_start(city)
+
+        # Support inputs such as "Chitradurga, Karnataka" when the city
+        # itself is already present in the database.
+        for city in cities:
+            names = [
+                city.get("name", ""),
+                city.get("name_kn", ""),
+                *city.get("aliases", []),
+            ]
+            normalised_names = [
+                _normalise(name)
+                for name in names
+                if isinstance(name, str) and len(_normalise(name)) >= 3
+            ]
+
+            for name in normalised_names:
+                if needle.startswith(name + " ") or needle.startswith(name + ","):
+                    return _make_start(city)
+
+    default = next(
+        (city for city in cities if city.get("id") == DEFAULT_CITY_ID),
+        None,
     )
+    if default is None:
+        raise RuntimeError(
+            f"Default city '{DEFAULT_CITY_ID}' is missing from {DATA_FILE}"
+        )
+
+    return _make_start(default, assumed=True)

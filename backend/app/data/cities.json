@@ -1,22 +1,1142 @@
 [
-  {"id": "bengaluru", "name": "Bengaluru", "name_kn": "ಬೆಂಗಳೂರು", "lat": 12.9716, "lng": 77.5946, "aliases": ["bangalore", "bengaluru", "blr"]},
-  {"id": "mysuru", "name": "Mysuru", "name_kn": "ಮೈಸೂರು", "lat": 12.2958, "lng": 76.6394, "aliases": ["mysore", "mysuru"]},
-  {"id": "mangaluru", "name": "Mangaluru", "name_kn": "ಮಂಗಳೂರು", "lat": 12.9141, "lng": 74.856, "aliases": ["mangalore", "mangaluru"]},
-  {"id": "hubballi", "name": "Hubballi", "name_kn": "ಹುಬ್ಬಳ್ಳಿ", "lat": 15.3647, "lng": 75.124, "aliases": ["hubli", "hubballi", "hubli-dharwad", "dharwad", "ಧಾರವಾಡ"]},
-  {"id": "belagavi", "name": "Belagavi", "name_kn": "ಬೆಳಗಾವಿ", "lat": 15.8497, "lng": 74.4977, "aliases": ["belgaum", "belagavi"]},
-  {"id": "kalaburagi", "name": "Kalaburagi", "name_kn": "ಕಲಬುರಗಿ", "lat": 17.3297, "lng": 76.8343, "aliases": ["gulbarga", "kalaburagi"]},
-  {"id": "ballari", "name": "Ballari", "name_kn": "ಬಳ್ಳಾರಿ", "lat": 15.1394, "lng": 76.9214, "aliases": ["bellary", "ballari"]},
-  {"id": "hosapete", "name": "Hosapete", "name_kn": "ಹೊಸಪೇಟೆ", "lat": 15.2689, "lng": 76.3909, "aliases": ["hospet", "hosapete"]},
-  {"id": "shivamogga", "name": "Shivamogga", "name_kn": "ಶಿವಮೊಗ್ಗ", "lat": 13.9299, "lng": 75.5681, "aliases": ["shimoga", "shivamogga"]},
-  {"id": "davanagere", "name": "Davanagere", "name_kn": "ದಾವಣಗೆರೆ", "lat": 14.4644, "lng": 75.9218, "aliases": ["davangere", "davanagere"]},
-  {"id": "tumakuru", "name": "Tumakuru", "name_kn": "ತುಮಕೂರು", "lat": 13.3379, "lng": 77.1173, "aliases": ["tumkur", "tumakuru"]},
-  {"id": "hassan", "name": "Hassan", "name_kn": "ಹಾಸನ", "lat": 13.0068, "lng": 76.1004, "aliases": ["hassan"]},
-  {"id": "udupi", "name": "Udupi", "name_kn": "ಉಡುಪಿ", "lat": 13.3409, "lng": 74.7421, "aliases": ["udupi"]},
-  {"id": "vijayapura", "name": "Vijayapura", "name_kn": "ವಿಜಯಪುರ", "lat": 16.8302, "lng": 75.71, "aliases": ["bijapur", "vijayapura"]},
-  {"id": "hyderabad", "name": "Hyderabad", "name_kn": "ಹೈದರಾಬಾದ್", "lat": 17.385, "lng": 78.4867, "aliases": ["hyderabad"]},
-  {"id": "chennai", "name": "Chennai", "name_kn": "ಚೆನ್ನೈ", "lat": 13.0827, "lng": 80.2707, "aliases": ["chennai", "madras"]},
-  {"id": "mumbai", "name": "Mumbai", "name_kn": "ಮುಂಬೈ", "lat": 19.076, "lng": 72.8777, "aliases": ["mumbai", "bombay"]},
-  {"id": "pune", "name": "Pune", "name_kn": "ಪುಣೆ", "lat": 18.5204, "lng": 73.8567, "aliases": ["pune"]},
-  {"id": "kochi", "name": "Kochi", "name_kn": "ಕೊಚ್ಚಿ", "lat": 9.9312, "lng": 76.2673, "aliases": ["cochin", "kochi"]},
-  {"id": "panaji", "name": "Panaji (Goa)", "name_kn": "ಪಣಜಿ", "lat": 15.4909, "lng": 73.8278, "aliases": ["goa", "panaji", "panjim"]}
+  {
+    "id": "bengaluru",
+    "name": "Bengaluru",
+    "name_kn": "ಬೆಂಗಳೂರು",
+    "lat": 12.9716,
+    "lng": 77.5946,
+    "aliases": [
+      "bangalore",
+      "bengaluru",
+      "blr"
+    ]
+  },
+  {
+    "id": "mysuru",
+    "name": "Mysuru",
+    "name_kn": "ಮೈಸೂರು",
+    "lat": 12.2958,
+    "lng": 76.6394,
+    "aliases": [
+      "mysore",
+      "mysuru"
+    ]
+  },
+  {
+    "id": "mangaluru",
+    "name": "Mangaluru",
+    "name_kn": "ಮಂಗಳೂರು",
+    "lat": 12.9141,
+    "lng": 74.856,
+    "aliases": [
+      "mangalore",
+      "mangaluru"
+    ]
+  },
+  {
+    "id": "hubballi",
+    "name": "Hubballi",
+    "name_kn": "ಹುಬ್ಬಳ್ಳಿ",
+    "lat": 15.3647,
+    "lng": 75.124,
+    "aliases": [
+      "hubli",
+      "hubballi",
+      "hubli-dharwad",
+      "dharwad",
+      "ಧಾರವಾಡ"
+    ]
+  },
+  {
+    "id": "belagavi",
+    "name": "Belagavi",
+    "name_kn": "ಬೆಳಗಾವಿ",
+    "lat": 15.8497,
+    "lng": 74.4977,
+    "aliases": [
+      "belgaum",
+      "belagavi"
+    ]
+  },
+  {
+    "id": "kalaburagi",
+    "name": "Kalaburagi",
+    "name_kn": "ಕಲಬುರಗಿ",
+    "lat": 17.3297,
+    "lng": 76.8343,
+    "aliases": [
+      "gulbarga",
+      "kalaburagi"
+    ]
+  },
+  {
+    "id": "ballari",
+    "name": "Ballari",
+    "name_kn": "ಬಳ್ಳಾರಿ",
+    "lat": 15.1394,
+    "lng": 76.9214,
+    "aliases": [
+      "bellary",
+      "ballari"
+    ]
+  },
+  {
+    "id": "hosapete",
+    "name": "Hosapete",
+    "name_kn": "ಹೊಸಪೇಟೆ",
+    "lat": 15.2689,
+    "lng": 76.3909,
+    "aliases": [
+      "hospet",
+      "hosapete"
+    ]
+  },
+  {
+    "id": "shivamogga",
+    "name": "Shivamogga",
+    "name_kn": "ಶಿವಮೊಗ್ಗ",
+    "lat": 13.9299,
+    "lng": 75.5681,
+    "aliases": [
+      "shimoga",
+      "shivamogga"
+    ]
+  },
+  {
+    "id": "davanagere",
+    "name": "Davanagere",
+    "name_kn": "ದಾವಣಗೆರೆ",
+    "lat": 14.4644,
+    "lng": 75.9218,
+    "aliases": [
+      "davangere",
+      "davanagere"
+    ]
+  },
+  {
+    "id": "tumakuru",
+    "name": "Tumakuru",
+    "name_kn": "ತುಮಕೂರು",
+    "lat": 13.3379,
+    "lng": 77.1173,
+    "aliases": [
+      "tumkur",
+      "tumakuru"
+    ]
+  },
+  {
+    "id": "hassan",
+    "name": "Hassan",
+    "name_kn": "ಹಾಸನ",
+    "lat": 13.0068,
+    "lng": 76.1004,
+    "aliases": [
+      "hassan"
+    ]
+  },
+  {
+    "id": "udupi",
+    "name": "Udupi",
+    "name_kn": "ಉಡುಪಿ",
+    "lat": 13.3409,
+    "lng": 74.7421,
+    "aliases": [
+      "udupi"
+    ]
+  },
+  {
+    "id": "vijayapura",
+    "name": "Vijayapura",
+    "name_kn": "ವಿಜಯಪುರ",
+    "lat": 16.8302,
+    "lng": 75.71,
+    "aliases": [
+      "bijapur",
+      "vijayapura"
+    ]
+  },
+  {
+    "id": "hyderabad",
+    "name": "Hyderabad",
+    "name_kn": "ಹೈದರಾಬಾದ್",
+    "lat": 17.385,
+    "lng": 78.4867,
+    "aliases": [
+      "hyderabad"
+    ]
+  },
+  {
+    "id": "chennai",
+    "name": "Chennai",
+    "name_kn": "ಚೆನ್ನೈ",
+    "lat": 13.0827,
+    "lng": 80.2707,
+    "aliases": [
+      "chennai",
+      "madras"
+    ]
+  },
+  {
+    "id": "mumbai",
+    "name": "Mumbai",
+    "name_kn": "ಮುಂಬೈ",
+    "lat": 19.076,
+    "lng": 72.8777,
+    "aliases": [
+      "mumbai",
+      "bombay"
+    ]
+  },
+  {
+    "id": "pune",
+    "name": "Pune",
+    "name_kn": "ಪುಣೆ",
+    "lat": 18.5204,
+    "lng": 73.8567,
+    "aliases": [
+      "pune"
+    ]
+  },
+  {
+    "id": "kochi",
+    "name": "Kochi",
+    "name_kn": "ಕೊಚ್ಚಿ",
+    "lat": 9.9312,
+    "lng": 76.2673,
+    "aliases": [
+      "cochin",
+      "kochi"
+    ]
+  },
+  {
+    "id": "panaji",
+    "name": "Panaji (Goa)",
+    "name_kn": "ಪಣಜಿ",
+    "lat": 15.4909,
+    "lng": 73.8278,
+    "aliases": [
+      "goa",
+      "panaji",
+      "panjim"
+    ]
+  },
+  {
+    "id": "delhi",
+    "name": "Delhi",
+    "name_kn": "ದೆಹಲಿ",
+    "lat": 28.6139,
+    "lng": 77.209,
+    "aliases": [
+      "delhi",
+      "new delhi",
+      "newdelhi"
+    ]
+  },
+  {
+    "id": "rajkot",
+    "name": "Rajkot",
+    "name_kn": "ರಾಜ್‌ಕೋಟ್",
+    "lat": 22.3039,
+    "lng": 70.8022,
+    "aliases": [
+      "rajkot"
+    ]
+  },
+  {
+    "id": "ahmedabad",
+    "name": "Ahmedabad",
+    "name_kn": "ಅಹಮದಾಬಾದ್",
+    "lat": 23.0225,
+    "lng": 72.5714,
+    "aliases": [
+      "ahmedabad",
+      "amdavad"
+    ]
+  },
+  {
+    "id": "talala",
+    "name": "Talala",
+    "name_kn": "ತಲಾಲಾ",
+    "lat": 21.0523,
+    "lng": 70.5167,
+    "aliases": [
+      "talala"
+    ]
+  },
+  {
+    "id": "jaipur",
+    "name": "Jaipur",
+    "name_kn": "ಜೈಪುರ",
+    "lat": 26.9124,
+    "lng": 75.7873,
+    "aliases": [
+      "jaipur"
+    ]
+  },
+  {
+    "id": "kolkata",
+    "name": "Kolkata",
+    "name_kn": "ಕೋಲ್ಕತ್ತಾ",
+    "lat": 22.5726,
+    "lng": 88.3639,
+    "aliases": [
+      "kolkata",
+      "calcutta"
+    ]
+  },
+  {
+    "id": "lucknow",
+    "name": "Lucknow",
+    "name_kn": "ಲಖನೌ",
+    "lat": 26.8467,
+    "lng": 80.9462,
+    "aliases": [
+      "lucknow"
+    ]
+  },
+  {
+    "id": "bhopal",
+    "name": "Bhopal",
+    "name_kn": "ಭೋಪಾಲ್",
+    "lat": 23.2599,
+    "lng": 77.4126,
+    "aliases": [
+      "bhopal"
+    ]
+  },
+  {
+    "id": "indore",
+    "name": "Indore",
+    "name_kn": "ಇಂದೋರ್",
+    "lat": 22.7196,
+    "lng": 75.8577,
+    "aliases": [
+      "indore"
+    ]
+  },
+  {
+    "id": "nagpur",
+    "name": "Nagpur",
+    "name_kn": "ನಾಗಪುರ",
+    "lat": 21.1458,
+    "lng": 79.0882,
+    "aliases": [
+      "nagpur"
+    ]
+  },
+  {
+    "id": "tirupati",
+    "name": "Tirupati",
+    "name_kn": "ತಿರುಪತಿ",
+    "lat": 13.6288,
+    "lng": 79.4192,
+    "aliases": [
+      "tirupati"
+    ]
+  },
+  {
+    "id": "coimbatore",
+    "name": "Coimbatore",
+    "name_kn": "ಕೊಯಮತ್ತೂರು",
+    "lat": 11.0168,
+    "lng": 76.9558,
+    "aliases": [
+      "coimbatore",
+      "kovai"
+    ]
+  },
+  {
+    "id": "thiruvananthapuram",
+    "name": "Thiruvananthapuram",
+    "name_kn": "ತಿರುವನಂತಪುರಂ",
+    "lat": 8.5241,
+    "lng": 76.9366,
+    "aliases": [
+      "thiruvananthapuram",
+      "trivandrum"
+    ]
+  },
+  {
+    "id": "chitradurga",
+    "name": "Chitradurga",
+    "name_kn": "ಚಿತ್ರದುರ್ಗ",
+    "lat": 14.2251,
+    "lng": 76.398,
+    "aliases": [
+      "chitradurga"
+    ]
+  },
+  {
+    "id": "kolar",
+    "name": "Kolar",
+    "name_kn": "ಕೋಲಾರ",
+    "lat": 13.1367,
+    "lng": 78.1292,
+    "aliases": [
+      "kolar"
+    ]
+  },
+  {
+    "id": "chikkaballapur",
+    "name": "Chikkaballapur",
+    "name_kn": "ಚಿಕ್ಕಬಳ್ಳಾಪುರ",
+    "lat": 13.4355,
+    "lng": 77.7315,
+    "aliases": [
+      "chikballapur",
+      "chikkaballapur"
+    ]
+  },
+  {
+    "id": "ramanagara",
+    "name": "Ramanagara",
+    "name_kn": "ರಾಮನಗರ",
+    "lat": 12.715,
+    "lng": 77.281,
+    "aliases": [
+      "ramanagara",
+      "ramanagaram"
+    ]
+  },
+  {
+    "id": "chikkamagaluru",
+    "name": "Chikkamagaluru",
+    "name_kn": "ಚಿಕ್ಕಮಗಳೂರು",
+    "lat": 13.3161,
+    "lng": 75.772,
+    "aliases": [
+      "chikmagalur",
+      "chikkamagaluru"
+    ]
+  },
+  {
+    "id": "kodagu_madikeri",
+    "name": "Madikeri",
+    "name_kn": "ಮಡಿಕೇರಿ",
+    "lat": 12.4244,
+    "lng": 75.7382,
+    "aliases": [
+      "madikeri",
+      "kodagu",
+      "coorg"
+    ]
+  },
+  {
+    "id": "gadag",
+    "name": "Gadag",
+    "name_kn": "ಗದಗ",
+    "lat": 15.4167,
+    "lng": 75.6167,
+    "aliases": [
+      "gadag"
+    ]
+  },
+  {
+    "id": "haveri",
+    "name": "Haveri",
+    "name_kn": "ಹಾವೇರಿ",
+    "lat": 14.7951,
+    "lng": 75.3991,
+    "aliases": [
+      "haveri"
+    ]
+  },
+  {
+    "id": "bagalkot",
+    "name": "Bagalkot",
+    "name_kn": "ಬಾಗಲಕೋಟೆ",
+    "lat": 16.185,
+    "lng": 75.6961,
+    "aliases": [
+      "bagalkot",
+      "bagalkote"
+    ]
+  },
+  {
+    "id": "bidar",
+    "name": "Bidar",
+    "name_kn": "ಬೀದರ್",
+    "lat": 17.9104,
+    "lng": 77.5199,
+    "aliases": [
+      "bidar"
+    ]
+  },
+  {
+    "id": "yadgir",
+    "name": "Yadgir",
+    "name_kn": "ಯಾದಗಿರಿ",
+    "lat": 16.77,
+    "lng": 77.1376,
+    "aliases": [
+      "yadgir",
+      "yadagiri"
+    ]
+  },
+  {
+    "id": "raichur",
+    "name": "Raichur",
+    "name_kn": "ರಾಯಚೂರು",
+    "lat": 16.212,
+    "lng": 77.3439,
+    "aliases": [
+      "raichur"
+    ]
+  },
+  {
+    "id": "koppal",
+    "name": "Koppal",
+    "name_kn": "ಕೊಪ್ಪಳ",
+    "lat": 15.35,
+    "lng": 76.15,
+    "aliases": [
+      "koppal"
+    ]
+  },
+  {
+    "id": "mandya",
+    "name": "Mandya",
+    "name_kn": "ಮಂಡ್ಯ",
+    "lat": 12.5218,
+    "lng": 76.8951,
+    "aliases": [
+      "mandya"
+    ]
+  },
+  {
+    "id": "chamarajanagar",
+    "name": "Chamarajanagar",
+    "name_kn": "ಚಾಮರಾಜನಗರ",
+    "lat": 11.9261,
+    "lng": 76.9437,
+    "aliases": [
+      "chamarajanagar",
+      "chamarajanagara"
+    ]
+  },
+  {
+    "id": "uttara_kannada_karwar",
+    "name": "Karwar",
+    "name_kn": "ಕಾರವಾರ",
+    "lat": 14.8136,
+    "lng": 74.1297,
+    "aliases": [
+      "karwar",
+      "uttara kannada",
+      "north kanara"
+    ]
+  },
+  {
+    "id": "dakshina_kannada_puttur",
+    "name": "Puttur",
+    "name_kn": "ಪುತ್ತೂರು",
+    "lat": 12.7598,
+    "lng": 75.2015,
+    "aliases": [
+      "puttur"
+    ]
+  },
+  {
+    "id": "sullia",
+    "name": "Sullia",
+    "name_kn": "ಸುಳ್ಯ",
+    "lat": 12.561,
+    "lng": 75.387,
+    "aliases": [
+      "sullia"
+    ]
+  },
+  {
+    "id": "kundapura",
+    "name": "Kundapura",
+    "name_kn": "ಕುಂದಾಪುರ",
+    "lat": 13.625,
+    "lng": 74.69,
+    "aliases": [
+      "kundapura",
+      "kundapur"
+    ]
+  },
+  {
+    "id": "bhatkal",
+    "name": "Bhatkal",
+    "name_kn": "ಭಟ್ಕಳ",
+    "lat": 13.967,
+    "lng": 74.57,
+    "aliases": [
+      "bhatkal"
+    ]
+  },
+  {
+    "id": "sirsi",
+    "name": "Sirsi",
+    "name_kn": "ಶಿರಸಿ",
+    "lat": 14.6191,
+    "lng": 74.8354,
+    "aliases": [
+      "sirsi"
+    ]
+  },
+  {
+    "id": "dandeli",
+    "name": "Dandeli",
+    "name_kn": "ದಾಂಡೇಲಿ",
+    "lat": 15.247,
+    "lng": 74.629,
+    "aliases": [
+      "dandeli"
+    ]
+  },
+  {
+    "id": "gokarna",
+    "name": "Gokarna",
+    "name_kn": "ಗೋಕರ್ಣ",
+    "lat": 14.5479,
+    "lng": 74.3188,
+    "aliases": [
+      "gokarna"
+    ]
+  },
+  {
+    "id": "murudeshwar",
+    "name": "Murudeshwar",
+    "name_kn": "ಮುರುಡೇಶ್ವರ",
+    "lat": 14.094,
+    "lng": 74.4845,
+    "aliases": [
+      "murudeshwar",
+      "murdeshwar"
+    ]
+  },
+  {
+    "id": "sagar_karnataka",
+    "name": "Sagara",
+    "name_kn": "ಸಾಗರ",
+    "lat": 14.167,
+    "lng": 75.029,
+    "aliases": [
+      "sagara",
+      "sagar karnataka"
+    ]
+  },
+  {
+    "id": "bhadravati",
+    "name": "Bhadravati",
+    "name_kn": "ಭದ್ರಾವತಿ",
+    "lat": 13.8485,
+    "lng": 75.705,
+    "aliases": [
+      "bhadravati"
+    ]
+  },
+  {
+    "id": "hunsur",
+    "name": "Hunsur",
+    "name_kn": "ಹುಣಸೂರು",
+    "lat": 12.303,
+    "lng": 76.292,
+    "aliases": [
+      "hunsur"
+    ]
+  },
+  {
+    "id": "krishnarajanagara",
+    "name": "Krishnarajanagara",
+    "name_kn": "ಕೃಷ್ಣರಾಜನಗರ",
+    "lat": 12.445,
+    "lng": 76.394,
+    "aliases": [
+      "kr nagar",
+      "krishnarajanagara"
+    ]
+  },
+  {
+    "id": "nanjangud",
+    "name": "Nanjangud",
+    "name_kn": "ನಂಜನಗೂಡು",
+    "lat": 12.12,
+    "lng": 76.68,
+    "aliases": [
+      "nanjangud"
+    ]
+  },
+  {
+    "id": "tirumakudalu_narasipura",
+    "name": "T. Narasipura",
+    "name_kn": "ಟಿ. ನರಸೀಪುರ",
+    "lat": 12.207,
+    "lng": 76.9,
+    "aliases": [
+      "t narasipura",
+      "t narasipur"
+    ]
+  },
+  {
+    "id": "kunigal",
+    "name": "Kunigal",
+    "name_kn": "ಕುಣಿಗಲ್",
+    "lat": 13.023,
+    "lng": 77.026,
+    "aliases": [
+      "kunigal"
+    ]
+  },
+  {
+    "id": "madhugiri",
+    "name": "Madhugiri",
+    "name_kn": "ಮಧುಗಿರಿ",
+    "lat": 13.66,
+    "lng": 77.21,
+    "aliases": [
+      "madhugiri"
+    ]
+  },
+  {
+    "id": "sira",
+    "name": "Sira",
+    "name_kn": "ಶಿರಾ",
+    "lat": 13.742,
+    "lng": 76.904,
+    "aliases": [
+      "sira"
+    ]
+  },
+  {
+    "id": "pavagada",
+    "name": "Pavagada",
+    "name_kn": "ಪಾವಗಡ",
+    "lat": 14.1,
+    "lng": 77.28,
+    "aliases": [
+      "pavagada"
+    ]
+  },
+  {
+    "id": "tarikere",
+    "name": "Tarikere",
+    "name_kn": "ತರೀಕೆರೆ",
+    "lat": 13.71,
+    "lng": 75.81,
+    "aliases": [
+      "tarikere"
+    ]
+  },
+  {
+    "id": "koppa",
+    "name": "Koppa",
+    "name_kn": "ಕೊಪ್ಪ",
+    "lat": 13.53,
+    "lng": 75.36,
+    "aliases": [
+      "koppa"
+    ]
+  },
+  {
+    "id": "sringeri",
+    "name": "Sringeri",
+    "name_kn": "ಶೃಂಗೇರಿ",
+    "lat": 13.42,
+    "lng": 75.25,
+    "aliases": [
+      "sringeri"
+    ]
+  },
+  {
+    "id": "belur",
+    "name": "Belur",
+    "name_kn": "ಬೇಲೂರು",
+    "lat": 13.162,
+    "lng": 75.867,
+    "aliases": [
+      "belur"
+    ]
+  },
+  {
+    "id": "halebidu",
+    "name": "Halebidu",
+    "name_kn": "ಹಳೇಬೀಡು",
+    "lat": 13.215,
+    "lng": 75.994,
+    "aliases": [
+      "halebidu",
+      "halebeedu"
+    ]
+  },
+  {
+    "id": "sakleshpur",
+    "name": "Sakleshpur",
+    "name_kn": "ಸಕಲೇಶಪುರ",
+    "lat": 12.941,
+    "lng": 75.784,
+    "aliases": [
+      "sakleshpur",
+      "sakaleshpur"
+    ]
+  },
+  {
+    "id": "arasinakere",
+    "name": "Arasikere",
+    "name_kn": "ಅರಸೀಕೆರೆ",
+    "lat": 13.314,
+    "lng": 76.257,
+    "aliases": [
+      "arasikere",
+      "arasekere"
+    ]
+  },
+  {
+    "id": "molakalmuru",
+    "name": "Molakalmuru",
+    "name_kn": "ಮೊಳಕಾಲ್ಮೂರು",
+    "lat": 14.72,
+    "lng": 76.745,
+    "aliases": [
+      "molakalmuru"
+    ]
+  },
+  {
+    "id": "kudligi",
+    "name": "Kudligi",
+    "name_kn": "ಕೂಡ್ಲಿಗಿ",
+    "lat": 14.906,
+    "lng": 76.385,
+    "aliases": [
+      "kudligi"
+    ]
+  },
+  {
+    "id": "gangavathi",
+    "name": "Gangavathi",
+    "name_kn": "ಗಂಗಾವತಿ",
+    "lat": 15.431,
+    "lng": 76.531,
+    "aliases": [
+      "gangavathi",
+      "gangavati"
+    ]
+  },
+  {
+    "id": "ranebennur",
+    "name": "Ranebennur",
+    "name_kn": "ರಾಣೆಬೆನ್ನೂರು",
+    "lat": 14.622,
+    "lng": 75.629,
+    "aliases": [
+      "ranebennur"
+    ]
+  },
+  {
+    "id": "byadgi",
+    "name": "Byadgi",
+    "name_kn": "ಬ್ಯಾಡಗಿ",
+    "lat": 14.673,
+    "lng": 75.486,
+    "aliases": [
+      "byadgi"
+    ]
+  },
+  {
+    "id": "mudhol",
+    "name": "Mudhol",
+    "name_kn": "ಮುಧೋಳ",
+    "lat": 16.333,
+    "lng": 75.284,
+    "aliases": [
+      "mudhol"
+    ]
+  },
+  {
+    "id": "jamkhandi",
+    "name": "Jamkhandi",
+    "name_kn": "ಜಮಖಂಡಿ",
+    "lat": 16.504,
+    "lng": 75.291,
+    "aliases": [
+      "jamkhandi"
+    ]
+  },
+  {
+    "id": "athani",
+    "name": "Athani",
+    "name_kn": "ಅಥಣಿ",
+    "lat": 16.728,
+    "lng": 75.065,
+    "aliases": [
+      "athani"
+    ]
+  },
+  {
+    "id": "gokak",
+    "name": "Gokak",
+    "name_kn": "ಗೋಕಾಕ",
+    "lat": 16.167,
+    "lng": 74.833,
+    "aliases": [
+      "gokak"
+    ]
+  },
+  {
+    "id": "chikkodi",
+    "name": "Chikkodi",
+    "name_kn": "ಚಿಕ್ಕೋಡಿ",
+    "lat": 16.43,
+    "lng": 74.6,
+    "aliases": [
+      "chikkodi"
+    ]
+  },
+  {
+    "id": "sindhanur",
+    "name": "Sindhanur",
+    "name_kn": "ಸಿಂಧನೂರು",
+    "lat": 15.78,
+    "lng": 76.755,
+    "aliases": [
+      "sindhanur"
+    ]
+  },
+  {
+    "id": "manvi",
+    "name": "Manvi",
+    "name_kn": "ಮಾನ್ವಿ",
+    "lat": 15.991,
+    "lng": 77.05,
+    "aliases": [
+      "manvi"
+    ]
+  },
+  {
+    "id": "devadurga",
+    "name": "Devadurga",
+    "name_kn": "ದೇವದುರ್ಗ",
+    "lat": 16.42,
+    "lng": 76.95,
+    "aliases": [
+      "devadurga"
+    ]
+  },
+  {
+    "id": "shahabad_karnataka",
+    "name": "Shahabad",
+    "name_kn": "ಶಹಾಬಾದ್",
+    "lat": 17.13,
+    "lng": 76.93,
+    "aliases": [
+      "shahabad karnataka"
+    ]
+  },
+  {
+    "id": "alnavar",
+    "name": "Alnavar",
+    "name_kn": "ಅಳ್ನಾವರ",
+    "lat": 15.427,
+    "lng": 74.741,
+    "aliases": [
+      "alnavar"
+    ]
+  },
+  {
+    "id": "annigeri",
+    "name": "Annigeri",
+    "name_kn": "ಅಣ್ಣಿಗೇರಿ",
+    "lat": 15.425,
+    "lng": 75.434,
+    "aliases": [
+      "annigeri"
+    ]
+  },
+  {
+    "id": "navalgund",
+    "name": "Navalgund",
+    "name_kn": "ನಾವಲಗುಂದ",
+    "lat": 15.558,
+    "lng": 75.353,
+    "aliases": [
+      "navalgund"
+    ]
+  },
+  {
+    "id": "kunta",
+    "name": "Kumta",
+    "name_kn": "ಕುಮಟಾ",
+    "lat": 14.428,
+    "lng": 74.418,
+    "aliases": [
+      "kumta"
+    ]
+  },
+  {
+    "id": "honnavar",
+    "name": "Honnavar",
+    "name_kn": "ಹೊನ್ನಾವರ",
+    "lat": 14.28,
+    "lng": 74.444,
+    "aliases": [
+      "honnavar"
+    ]
+  },
+  {
+    "id": "ankola",
+    "name": "Ankola",
+    "name_kn": "ಅಂಕೋಲಾ",
+    "lat": 14.66,
+    "lng": 74.304,
+    "aliases": [
+      "ankola"
+    ]
+  },
+  {
+    "id": "yellapur",
+    "name": "Yellapur",
+    "name_kn": "ಯಲ್ಲಾಪುರ",
+    "lat": 14.963,
+    "lng": 74.709,
+    "aliases": [
+      "yellapur"
+    ]
+  },
+  {
+    "id": "haliyala",
+    "name": "Haliyal",
+    "name_kn": "ಹಳಿಯಾಳ",
+    "lat": 15.33,
+    "lng": 74.765,
+    "aliases": [
+      "haliyal",
+      "haliyala"
+    ]
+  },
+  {
+    "id": "ron",
+    "name": "Ron",
+    "name_kn": "ರೋಣ",
+    "lat": 15.7,
+    "lng": 75.735,
+    "aliases": [
+      "ron"
+    ]
+  },
+  {
+    "id": "nargund",
+    "name": "Nargund",
+    "name_kn": "ನರಗುಂದ",
+    "lat": 15.722,
+    "lng": 75.386,
+    "aliases": [
+      "nargund"
+    ]
+  },
+  {
+    "id": "badami",
+    "name": "Badami",
+    "name_kn": "ಬಾದಾಮಿ",
+    "lat": 15.914,
+    "lng": 75.676,
+    "aliases": [
+      "badami"
+    ]
+  },
+  {
+    "id": "ilkal",
+    "name": "Ilkal",
+    "name_kn": "ಇಳಕಲ್",
+    "lat": 15.96,
+    "lng": 76.115,
+    "aliases": [
+      "ilkal"
+    ]
+  },
+  {
+    "id": "hungund",
+    "name": "Hungund",
+    "name_kn": "ಹುನಗುಂದ",
+    "lat": 16.064,
+    "lng": 76.058,
+    "aliases": [
+      "hungund"
+    ]
+  },
+  {
+    "id": "saundatti",
+    "name": "Saundatti",
+    "name_kn": "ಸವದತ್ತಿ",
+    "lat": 15.766,
+    "lng": 75.117,
+    "aliases": [
+      "saundatti",
+      "savadatti"
+    ]
+  },
+  {
+    "id": "ramdurg",
+    "name": "Ramdurg",
+    "name_kn": "ರಾಮದುರ್ಗ",
+    "lat": 15.949,
+    "lng": 75.296,
+    "aliases": [
+      "ramdurg"
+    ]
+  },
+  {
+    "id": "chincholi",
+    "name": "Chincholi",
+    "name_kn": "ಚಿಂಚೋಳಿ",
+    "lat": 17.465,
+    "lng": 77.418,
+    "aliases": [
+      "chincholi"
+    ]
+  },
+  {
+    "id": "sedam",
+    "name": "Sedam",
+    "name_kn": "ಸೇಡಂ",
+    "lat": 17.18,
+    "lng": 77.283,
+    "aliases": [
+      "sedam"
+    ]
+  },
+  {
+    "id": "afzalpur",
+    "name": "Afzalpur",
+    "name_kn": "ಅಫಜಲಪುರ",
+    "lat": 17.2,
+    "lng": 76.36,
+    "aliases": [
+      "afzalpur"
+    ]
+  },
+  {
+    "id": "jewargi",
+    "name": "Jewargi",
+    "name_kn": "ಜೇವರ್ಗಿ",
+    "lat": 17.02,
+    "lng": 76.77,
+    "aliases": [
+      "jewargi",
+      "jevaragi"
+    ]
+  },
+  {
+    "id": "shorapur",
+    "name": "Shorapur",
+    "name_kn": "ಶೋರಾಪುರ",
+    "lat": 16.52,
+    "lng": 76.76,
+    "aliases": [
+      "shorapur",
+      "surpur"
+    ]
+  },
+  {
+    "id": "hunagund",
+    "name": "Hunagund",
+    "name_kn": "ಹುನಗುಂದ",
+    "lat": 16.064,
+    "lng": 76.058,
+    "aliases": [
+      "hunagund"
+    ]
+  }
 ]
