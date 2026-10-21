@@ -1,3 +1,4 @@
+
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { DestinationDialog } from './components/DestinationDialog'
 import { Destinations, type Filter } from './components/Destinations'
@@ -13,6 +14,7 @@ import { LanguageProvider } from './i18n/LanguageContext'
 import { generateTrip, TripError } from './lib/api'
 import { useDestinations } from './lib/useDestinations'
 import type { Destination, Interest, TripRequest } from './types'
+import { FounderPage } from './pages/FounderPage'
 
 function scrollToId(id: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -24,7 +26,7 @@ function Page() {
   const [selected, setSelected] = useState<Destination | null>(null)
   const [request, setRequest] = useState<TripRequest | null>(null)
   const [trip, setTrip] = useState<TripState | null>(null)
-  const [formKey, setFormKey] = useState(0) // changing the key clears the form for a new trip
+  const [formKey, setFormKey] = useState(0)
   const resultRef = useRef<HTMLElement>(null)
   const inflight = useRef<AbortController | null>(null)
 
@@ -36,23 +38,27 @@ function Page() {
   }
 
   const run = useCallback((next: TripRequest) => {
-    inflight.current?.abort() // a newer request replaces any one still running
+    inflight.current?.abort()
     const controller = new AbortController()
     inflight.current = controller
     setRequest(next)
     setTrip({ status: 'loading' })
-    // Wait one frame so the result section exists before scrolling to it.
+
     requestAnimationFrame(() => {
       resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
       resultRef.current?.focus({ preventScroll: true })
     })
+
     generateTrip(next, controller.signal).then(
       (plan) => {
         if (!controller.signal.aborted) setTrip({ status: 'ready', plan })
       },
       (error: unknown) => {
         if (controller.signal.aborted) return
-        setTrip({ status: 'error', kind: error instanceof TripError ? error.kind : 'server' })
+        setTrip({
+          status: 'error',
+          kind: error instanceof TripError ? error.kind : 'server',
+        })
       },
     )
   }, [])
@@ -71,6 +77,7 @@ function Page() {
       <main>
         <Hero destinationCount={status === 'ready' ? destinations.length : null} />
         <PlannerForm key={formKey} onSubmit={run} />
+
         {trip && (
           <TripResults
             ref={resultRef}
@@ -81,6 +88,7 @@ function Page() {
             onNewTrip={newTrip}
           />
         )}
+
         <Destinations
           status={status}
           destinations={destinations}
@@ -89,17 +97,26 @@ function Page() {
           onOpen={setSelected}
           onRetry={retry}
         />
+
         <Experiences destinations={destinations} onPick={pickExperience} />
         <HowItWorks />
         <KannadaSection />
       </main>
+
       <Footer />
-      <DestinationDialog destination={selected} onClose={() => setSelected(null)} />
+      <DestinationDialog
+        destination={selected}
+        onClose={() => setSelected(null)}
+      />
     </>
   )
 }
 
 export default function App() {
+  if (window.location.pathname.replace(/\/+$/, '') === '/founder') {
+    return <FounderPage />
+  }
+
   return (
     <LanguageProvider>
       <Page />
