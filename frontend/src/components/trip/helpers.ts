@@ -45,17 +45,17 @@ export function totalRoadKm(plan: TripPlan): number {
 
 /** Google Maps directions through the ordered stops and back to the start. */
 export function googleRouteUrl(plan: TripPlan): string {
-  const start = `${plan.start.lat},${plan.start.lng}`
+  const start = `${plan.start.name} (${plan.start.lat},${plan.start.lng})`
 
-  const points = [
-    start,
-    ...plan.stops.map((stop) => `${stop.lat},${stop.lng}`),
-    start,
-  ]
+  const origin = start
+  const destination = start
 
-  const origin = points[0]
-  const destination = points[points.length - 1]
-  const waypoints = points.slice(1, -1).join('|')
+  const waypoints = plan.stops
+    .map(
+      (stop) => `${stop.name} (${stop.lat},${stop.lng})`,
+    )
+    .map((point) => encodeURIComponent(point))
+    .join('|')
 
   const params = new URLSearchParams({
     api: '1',
