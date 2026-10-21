@@ -1,7 +1,17 @@
  # NammaTrip AI — Your Karnataka Journey, Intelligently Planned
-“NammaTrip AI is an AI-powered Karnataka travel planner created by Jeevan KT, Founder & Developer.”
 
 An AI-powered Karnataka travel planner built for the Kannada Digital Innovation Hackathon 2026.
+
+## Founder & Developer
+
+**Jeevan KT** is the founder and developer of **NammaTrip AI**, an AI-powered travel planner designed to help travellers explore Karnataka.
+
+The project helps users create personalized itineraries based on their budget, trip duration, and interests, with support for English and Kannada.
+
+### Project Links
+- **Live Website:** https://nammatrip-ai.vercel.app/
+- **GitHub Repository:** https://github.com/jeevan058/nammatrip-ai
+
 
 **Live app:** https://nammatrip-ai.vercel.app/
 
