@@ -1,66 +1,103 @@
-# NammaTrip AI — Your Karnataka Journey, Intelligently Planned
+﻿# NammaTrip AI — Your Karnataka Journey, Intelligently Planned
 
-AI travel planner for Karnataka (Kannada Digital Innovation Hackathon 2026).
-Tell it where you start, how many days, your budget and interests; it builds a
-day-by-day itinerary with an honest rupee estimate and a route map, in English or Kannada.
+An AI-powered Karnataka travel planner built for the Kannada Digital Innovation Hackathon 2026.
 
-## What works today
-- Homepage, planner form with validation, English/Kannada switcher
-- Itinerary generation: code picks and orders stops, budget is calculated in code
-- Works with no API key (demo mode, curated data); with a key the LLM writes the text
-- Results dashboard: overview, Leaflet/OpenStreetMap route, day-by-day, budget, tips
-- Copy itinerary, print / save as PDF, error + retry states
-- 79 backend tests
+**Live app:** https://nammatrip-ai.vercel.app/
 
-## Not built yet
-Chat-style itinerary refinement, voice input, free-text Kannada request parsing,
-saved trips, deployment. Real routed distances (current distances are labelled estimates).
+NammaTrip AI creates day-by-day Karnataka itineraries based on your starting location, travel duration, budget, interests, and travel preferences. It includes destination photos, a route map, and an estimated budget, with support for English and Kannada.
 
-## Run on Windows (PowerShell)
-Install once: Node.js LTS (https://nodejs.org), Python 3.11+ (https://python.org, tick "Add to PATH"), Git (https://git-scm.com).
+## Features
 
-**Terminal 1: backend**
+- Personalized day-by-day Karnataka itineraries
+- Starting-location autocomplete with place selection
+- Budget breakdown in Indian rupees
+- Interactive Leaflet/OpenStreetMap route map
+- English and Kannada interface
+- Destination and hero photography
+- Optional AI-generated itinerary descriptions
+- Demo mode using curated data when no AI API key is configured
+- Copy itinerary and print/save as PDF
+- Error handling and retry states
+
+## Technology Stack
+
+- **Frontend:** React, TypeScript, Vite, Tailwind CSS
+- **Backend:** Python, FastAPI, Pydantic
+- **Maps:** Leaflet and OpenStreetMap
+- **Location search:** Photon
+- **Deployment:** Vercel (frontend) and Render (backend)
+
+## Run Locally on Windows
+
+Install [Node.js LTS](https://nodejs.org/), [Python 3.11+](https://www.python.org/downloads/) and [Git](https://git-scm.com/).
+
+### 1. Start the backend
+
+From the project root, open PowerShell:
+
 ```powershell
-cd nammatrip-ai\backend
+cd backend
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 pip install -r requirements.txt
 copy .env.example .env
 uvicorn app.main:app --reload --port 8000
 ```
-If activation is blocked: `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`, then retry.
-Check http://127.0.0.1:8000/api/health and the API docs at http://127.0.0.1:8000/docs
 
-**Terminal 2: frontend**
+If PowerShell blocks activation, run `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` and retry.
+
+- Health check: http://127.0.0.1:8000/api/health
+- API documentation: http://127.0.0.1:8000/docs
+
+### 2. Start the frontend
+
+Open a second PowerShell terminal from the project root:
+
 ```powershell
-cd nammatrip-ai\frontend
+cd frontend
 npm install
 npm run dev
 ```
-Open http://localhost:5173
 
-**Run tests**
+Open http://localhost:5173.
+
+### 3. Run backend tests
+
+From the project root:
+
 ```powershell
-cd nammatrip-ai\backend
+cd backend
 .\.venv\Scripts\Activate.ps1
 pytest
 ```
 
-## Turn on the AI writer (optional)
-Edit `backend\.env` (never share or commit it): set `LLM_PROVIDER`, `LLM_API_KEY`, `LLM_MODEL`
-(and `LLM_BASE_URL` for `openai_compatible`). Restart the backend. `/api/health` should show `"mode": "live"`.
-If the AI fails or returns invalid output, the app falls back to demo mode automatically.
+## Optional: Configure the AI Writer
 
-## Add real photos (optional, once)
-```powershell
-cd nammatrip-ai
-python scripts\fetch_images.py
-```
-Downloads openly licensed Wikimedia Commons photos and writes credits to ATTRIBUTIONS.md.
+Edit `backend\.env` and configure `LLM_PROVIDER`, `LLM_API_KEY`, and `LLM_MODEL`. Set `LLM_BASE_URL` when required by your provider.
 
-## API
-- `GET /api/health` · `GET /api/destinations` · `GET /api/destinations/{id}`
-- `POST /api/trips/generate` — body: `start_city, days, budget_inr, travellers, interests[], style, transport, accommodation, language`
+Never commit or share API keys. Restart the backend after changing configuration. If AI generation fails or returns invalid output, the application can fall back to demo mode.
 
-All costs and travel times are planning estimates, not live prices.
-Kannada text is a first draft and should be reviewed by a native speaker.
+## Destination Images
+
+Images are stored under `frontend/public/images/`.
+
+The optional image-fetching script is available at `scripts\fetch_images.py`. Review the script and image attribution handling before running it to refresh images.
+
+## API Endpoints
+
+- `GET /api/health` — backend health and mode
+- `GET /api/destinations` — list destinations
+- `GET /api/destinations/{id}` — retrieve a destination
+- `POST /api/trips/generate` — generate an itinerary
+
+Trip requests include the starting city, trip duration, budget, travellers, interests, travel style, transport, accommodation, and language. Selected starting-location coordinates can also be provided.
+
+## Important Notes
+
+- Budgets, distances, and travel times are estimates, not guaranteed live prices or routed measurements.
+- AI-generated descriptions depend on backend configuration and the selected provider.
+- Kannada translations are a first draft and should be reviewed by a native speaker.
+
+## Hackathon Project
+
+NammaTrip AI — making Karnataka travel planning more accessible, personalized, and budget-conscious.
