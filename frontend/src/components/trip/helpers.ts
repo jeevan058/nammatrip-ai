@@ -37,20 +37,42 @@ export function legEnds(
   }
 }
 
+/** Total estimated road distance for the itinerary. */
 export function totalRoadKm(plan: TripPlan): number {
   return Math.round(
     plan.legs.reduce((sum, leg) => sum + leg.est_road_km, 0),
   )
 }
 
-/** Google Maps directions through the ordered stops and back to the start. */
+/**
+ * Build a Google Maps directions URL using readable place names.
+ * Known Karnataka destinations use Google Maps-friendly names.
+ */
 export function googleRouteUrl(plan: TripPlan): string {
-  const start = `${plan.start.lat},${plan.start.lng}`
+  const resolveMapName = (name: string): string => {
+    const normalized = name.toLowerCase()
 
-  const waypoints = plan.stops
-    .map((stop) => `${stop.lat},${stop.lng}`)
-    .map(encodeURIComponent)
-    .join('|')
+    if (normalized.includes('bandipur')) {
+      return 'Bandipur National Park, Karnataka, India'
+    }
+
+    if (
+      normalized.includes('coorg') ||
+      normalized.includes('kodagu') ||
+      normalized.includes('madikeri')
+    ) {
+      return 'Madikeri, Karnataka, India'
+    }
+
+    if (normalized.includes('mysuru') || normalized.includes('mysore')) {
+      return 'Mysuru, Karnataka, India'
+    }
+
+    return `${name}, Karnataka, India`
+  }
+
+  const start = resolveMapName(plan.start.name)
+  const stops = plan.stops.map((stop) => resolveMapName(stop.name))
 
   const params = new URLSearchParams({
     api: '1',
@@ -59,8 +81,8 @@ export function googleRouteUrl(plan: TripPlan): string {
     travelmode: 'driving',
   })
 
-  if (waypoints) {
-    params.set('waypoints', waypoints)
+  if (stops.length > 0) {
+    params.set('waypoints', stops.join('|'))
   }
 
   return `https://www.google.com/maps/dir/?${params.toString()}`
