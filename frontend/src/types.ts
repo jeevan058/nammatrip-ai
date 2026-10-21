@@ -1,3 +1,4 @@
+
 export const INTERESTS = [
   'nature',
   'heritage',
@@ -32,6 +33,8 @@ export type Lang = 'en' | 'kn'
 /** Mirrors backend/app/schemas.py TripRequest. */
 export interface TripRequest {
   start_city: string
+  start_lat?: number
+  start_lng?: number
   days: number
   budget_inr: number
   travellers: number
@@ -127,7 +130,13 @@ export interface BudgetBreakdown {
 
 export interface TripPlan {
   request: TripRequest
-  start: { name: string; name_kn: string | null; lat: number; lng: number; assumed: boolean }
+  start: {
+    name: string
+    name_kn: string | null
+    lat: number
+    lng: number
+    assumed: boolean
+  }
   summary: string
   days: DayPlan[]
   stops: Destination[]

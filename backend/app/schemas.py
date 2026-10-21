@@ -2,21 +2,15 @@
 
 from typing import Literal
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 
 Interest = Literal[
-    "nature",
-    "heritage",
-    "beaches",
-    "adventure",
-    "wildlife",
-    "food",
-    "culture",
-    "photography",
-    "spiritual",
+    "nature", "heritage", "beaches", "adventure", "wildlife",
+    "food", "culture", "photography", "spiritual",
 ]
 TravelStyle = Literal[
-    "relaxing", "adventurous", "cultural", "family-friendly", "romantic", "budget-friendly"
+    "relaxing", "adventurous", "cultural", "family-friendly",
+    "romantic", "budget-friendly",
 ]
 Transport = Literal["bus", "train", "car", "two-wheeler"]
 Accommodation = Literal["budget", "midrange", "premium"]
@@ -24,9 +18,11 @@ Language = Literal["en", "kn"]
 
 
 class TripRequest(BaseModel):
-    """What the traveller tells us. Validated before anything else runs."""
+    """What the traveller tells us. Coordinates are optional for older clients."""
 
-    start_city: str = Field(min_length=2, max_length=80)
+    start_city: str = Field(min_length=2, max_length=120)
+    start_lat: float | None = Field(default=None, ge=-90, le=90)
+    start_lng: float | None = Field(default=None, ge=-180, le=180)
     days: int = Field(ge=1, le=10)
     budget_inr: int = Field(ge=1000, le=1_000_000)
     travellers: int = Field(ge=1, le=12)
@@ -45,8 +41,13 @@ class TripRequest(BaseModel):
     @field_validator("interests")
     @classmethod
     def _unique_interests(cls, value):
-        # keep the order the user chose, drop duplicates
         return list(dict.fromkeys(value))
+
+    @model_validator(mode="after")
+    def _coordinates_must_be_paired(self):
+        if (self.start_lat is None) != (self.start_lng is None):
+            raise ValueError("start_lat and start_lng must be provided together")
+        return self
 
 
 class CostRange(BaseModel):
@@ -59,7 +60,7 @@ class Destination(BaseModel):
     name: str
     name_kn: str
     region: str
-    lat: float = Field(ge=11.0, le=19.0)  # rough bounding box for Karnataka
+    lat: float = Field(ge=11.0, le=19.0)
     lng: float = Field(ge=73.5, le=79.0)
     categories: list[Interest]
     description: str
@@ -76,15 +77,11 @@ class Destination(BaseModel):
 
 class BudgetLine(BaseModel):
     category: Literal[
-        "transportation",
-        "accommodation",
-        "food",
-        "activities",
-        "local_transport",
-        "buffer",
+        "transportation", "accommodation", "food",
+        "activities", "local_transport", "buffer",
     ]
     amount_inr: int = Field(ge=0)
-    basis: str  # plain-language explanation of how the number was estimated
+    basis: str
 
 
 class BudgetSuggestion(BaseModel):
@@ -97,14 +94,12 @@ class BudgetBreakdown(BaseModel):
     lines: list[BudgetLine]
     total_inr: int
     budget_inr: int
-    difference_inr: int  # budget - total; negative means over budget
+    difference_inr: int
     within_budget: bool
     is_estimate: bool = True
     disclaimer: str
-    suggestions: list[BudgetSuggestion] = []
+    suggestions: list[BudgetSuggestion] = Field(default_factory=list)
 
-
-# --- Itinerary models --------------------------------------------------------
 
 Slot = Literal["morning", "afternoon", "evening"]
 
@@ -138,7 +133,7 @@ class StartPoint(BaseModel):
     name_kn: str | None = None
     lat: float
     lng: float
-    assumed: bool = False  # True when we did not recognise the city and used a default
+    assumed: bool = False
 
 
 class TravelLeg(BaseModel):
@@ -160,11 +155,11 @@ class TripPlan(BaseModel):
     start: StartPoint
     summary: str
     days: list[DayPlan]
-    stops: list[Destination]  # ordered, full records so the client can draw the map
+    stops: list[Destination]
     legs: list[TravelLeg]
     budget: BudgetBreakdown
     tips: list[str]
-    warnings: list[str] = []
+    warnings: list[str] = Field(default_factory=list)
     source: Literal["llm", "fallback"]
     fallback_reason: str | None = None
     estimates_note: str

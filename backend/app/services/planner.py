@@ -1,3 +1,4 @@
+
 """Trip planning pipeline.
 
 validate request -> resolve start -> select + order stops -> assign days
@@ -10,7 +11,7 @@ import logging
 
 from app.schemas import Destination, LLMItinerary, TravelLeg, TripPlan, TripRequest
 from app.services.budget import DISCLAIMER, calculate_budget, estimate_road_km, haversine_km
-from app.services.cities import resolve_start
+from app.services.cities import resolve_trip_start
 from app.services.destinations import load_destinations
 from app.services.fallback import build_fallback_itinerary
 from app.services.llm import LLMError, LLMProvider, LLMUnavailable, get_provider
@@ -20,7 +21,7 @@ from app.services.validator import InvalidItinerary, validate_llm_itinerary
 
 log = logging.getLogger("nammatrip.planner")
 
-AVERAGE_SPEED_KMH = 45.0  # rough average road speed used only for the labelled time estimate
+AVERAGE_SPEED_KMH = 45.0
 LONG_LEG_KM = 350.0
 MIN_LEG_KM = 5.0
 MAX_LLM_ATTEMPTS = 2
@@ -50,7 +51,11 @@ JSON shape:
 Each day needs a morning, afternoon and evening activity."""
 
 
-def _build_user_prompt(request: TripRequest, stops: list[Stop], skeleton: dict[int, list[str]]) -> str:
+def _build_user_prompt(
+    request: TripRequest,
+    stops: list[Stop],
+    skeleton: dict[int, list[str]],
+) -> str:
     by_id = {s.destination.id: s.destination for s in stops}
     payload = {
         "traveller": {
@@ -63,7 +68,8 @@ def _build_user_prompt(request: TripRequest, stops: list[Stop], skeleton: dict[i
             "output_language": "Kannada" if request.language == "kn" else "English",
         },
         "days": [
-            {"day": day, "destination_ids": ids} for day, ids in sorted(skeleton.items())
+            {"day": day, "destination_ids": ids}
+            for day, ids in sorted(skeleton.items())
         ],
         "destinations": {
             dest_id: {
@@ -82,45 +88,112 @@ def _build_user_prompt(request: TripRequest, stops: list[Stop], skeleton: dict[i
 
 
 def _generate_with_llm(
-    provider: LLMProvider, request: TripRequest, stops: list[Stop], skeleton: dict[int, list[str]]
+    provider: LLMProvider,
+    request: TripRequest,
+    stops: list[Stop],
+    skeleton: dict[int, list[str]],
 ) -> LLMItinerary:
     user = _build_user_prompt(request, stops, skeleton)
     last_error = "unknown error"
+
     for attempt in range(1, MAX_LLM_ATTEMPTS + 1):
         prompt = user
         if attempt > 1:
-            prompt += f"\n\nYour previous reply was rejected: {last_error}. Return corrected JSON only."
+            prompt += (
+                f"\n\nYour previous reply was rejected: {last_error}. "
+                "Return corrected JSON only."
+            )
+
         raw = provider.complete_json(SYSTEM_PROMPT, prompt)
+
         try:
             return validate_llm_itinerary(raw, skeleton)
         except InvalidItinerary as error:
             last_error = str(error)
-            log.warning("LLM output rejected (attempt %s): %s", attempt, last_error)
+            log.warning(
+                "LLM output rejected (attempt %s): %s",
+                attempt,
+                last_error,
+            )
+
     raise InvalidItinerary(last_error)
 
 
-def _build_legs(request: TripRequest, start, stops: list[Stop], skeleton: dict[int, list[str]]) -> list[TravelLeg]:
+def _build_legs(
+    request: TripRequest,
+    start,
+    stops: list[Stop],
+    skeleton: dict[int, list[str]],
+) -> list[TravelLeg]:
     first_day = {}
+
     for day, ids in skeleton.items():
         for dest_id in ids:
             first_day.setdefault(dest_id, day)
 
     legs: list[TravelLeg] = []
-    prev_name, prev_id, prev_lat, prev_lng = start.name, None, start.lat, start.lng
+    prev_name, prev_id, prev_lat, prev_lng = (
+        start.name,
+        None,
+        start.lat,
+        start.lng,
+    )
+
     for stop in stops:
         d = stop.destination
-        legs.append(_leg(first_day[d.id], prev_name, d.name, prev_id, d.id, prev_lat, prev_lng, d.lat, d.lng))
-        prev_name, prev_id, prev_lat, prev_lng = d.name, d.id, d.lat, d.lng
+        legs.append(
+            _leg(
+                first_day[d.id],
+                prev_name,
+                d.name,
+                prev_id,
+                d.id,
+                prev_lat,
+                prev_lng,
+                d.lat,
+                d.lng,
+            )
+        )
+        prev_name, prev_id, prev_lat, prev_lng = (
+            d.name,
+            d.id,
+            d.lat,
+            d.lng,
+        )
+
     legs.append(
-        _leg(max(skeleton), prev_name, start.name, prev_id, None, prev_lat, prev_lng, start.lat, start.lng)
+        _leg(
+            max(skeleton),
+            prev_name,
+            start.name,
+            prev_id,
+            None,
+            prev_lat,
+            prev_lng,
+            start.lat,
+            start.lng,
+        )
     )
-    # A leg under 5 km (for example when the start city is itself a stop) is not a journey.
+
+    # A leg under 5 km (for example when the start city is itself a stop)
+    # is not a journey.
     return [leg for leg in legs if leg.est_road_km >= MIN_LEG_KM]
 
 
-def _leg(day, from_name, to_name, from_id, to_id, lat1, lng1, lat2, lng2) -> TravelLeg:
+def _leg(
+    day,
+    from_name,
+    to_name,
+    from_id,
+    to_id,
+    lat1,
+    lng1,
+    lat2,
+    lng2,
+) -> TravelLeg:
     straight = haversine_km(lat1, lng1, lat2, lng2)
     road = estimate_road_km(lat1, lng1, lat2, lng2)
+
     return TravelLeg(
         day=day,
         from_name=from_name,
@@ -134,36 +207,79 @@ def _leg(day, from_name, to_name, from_id, to_id, lat1, lng1, lat2, lng2) -> Tra
 
 
 def _consistency_warnings(
-    request: TripRequest, plan_days: int, legs: list[TravelLeg], stops: list[Stop], budget, assumed_start: bool
+    request: TripRequest,
+    plan_days: int,
+    legs: list[TravelLeg],
+    stops: list[Stop],
+    budget,
+    assumed_start: bool,
 ) -> list[str]:
     lang = request.language
     warnings: list[str] = []
+
     if assumed_start:
-        warnings.append(t(lang, "warn_assumed_start", city=request.start_city))
+        warnings.append(
+            t(lang, "warn_assumed_start", city=request.start_city)
+        )
+
     if plan_days < request.days:
-        warnings.append(t(lang, "warn_fewer_days", planned=plan_days, requested=request.days))
+        warnings.append(
+            t(
+                lang,
+                "warn_fewer_days",
+                planned=plan_days,
+                requested=request.days,
+            )
+        )
+
     for leg in legs:
         if leg.est_road_km > LONG_LEG_KM:
             warnings.append(
-                t(lang, "warn_long_leg", a=leg.from_name, b=leg.to_name, km=round(leg.est_road_km))
+                t(
+                    lang,
+                    "warn_long_leg",
+                    a=leg.from_name,
+                    b=leg.to_name,
+                    km=round(leg.est_road_km),
+                )
             )
+
     if not budget.within_budget:
-        warnings.append(t(lang, "warn_over_budget", over=f"{-budget.difference_inr:,}"))
+        warnings.append(
+            t(lang, "warn_over_budget", over=f"{-budget.difference_inr:,}")
+        )
+
         free = [
-            (s.destination.name_kn if lang == "kn" else s.destination.name)
+            (
+                s.destination.name_kn
+                if lang == "kn"
+                else s.destination.name
+            )
             for s in stops
             if s.destination.activity_cost_inr.min == 0
         ]
+
         if free:
-            warnings.append(t(lang, "warn_free", names=", ".join(free)))
+            warnings.append(
+                t(lang, "warn_free", names=", ".join(free))
+            )
+
     return warnings
 
 
-def generate_trip(request: TripRequest, provider: LLMProvider | None = None) -> TripPlan:
-    start = resolve_start(request.start_city)
+def generate_trip(
+    request: TripRequest,
+    provider: LLMProvider | None = None,
+) -> TripPlan:
+    # Use the selected place's coordinates when provided by the frontend.
+    # Otherwise, resolve the starting location using the existing city dataset.
+    start = resolve_trip_start(request)
+
     stops = select_stops(request, start, load_destinations())
     if not stops:
-        raise NoDestinationsFound("No destinations match the selected interests.")
+        raise NoDestinationsFound(
+            "No destinations match the selected interests."
+        )
 
     skeleton = assign_days(stops)
     plan_days = len(skeleton)
@@ -171,13 +287,22 @@ def generate_trip(request: TripRequest, provider: LLMProvider | None = None) -> 
     source = "llm"
     fallback_reason: str | None = None
     itinerary: LLMItinerary | None = None
+
     try:
         active = provider or get_provider()
-        itinerary = _generate_with_llm(active, request, stops, skeleton)
+        itinerary = _generate_with_llm(
+            active,
+            request,
+            stops,
+            skeleton,
+        )
     except LLMUnavailable as error:
         source, fallback_reason = "fallback", str(error)
     except (LLMError, InvalidItinerary) as error:
-        log.warning("Falling back to deterministic itinerary: %s", error)
+        log.warning(
+            "Falling back to deterministic itinerary: %s",
+            error,
+        )
         source, fallback_reason = "fallback", str(error)
 
     if itinerary is None:
@@ -185,9 +310,16 @@ def generate_trip(request: TripRequest, provider: LLMProvider | None = None) -> 
 
     legs = _build_legs(request, start, stops, skeleton)
     route_km = sum(leg.est_road_km for leg in legs)
+
     activity_per_person = sum(
-        (s.destination.activity_cost_inr.min + s.destination.activity_cost_inr.max) // 2 for s in stops
+        (
+            s.destination.activity_cost_inr.min
+            + s.destination.activity_cost_inr.max
+        )
+        // 2
+        for s in stops
     )
+
     budget = calculate_budget(
         days=plan_days,
         travellers=request.travellers,
@@ -198,7 +330,14 @@ def generate_trip(request: TripRequest, provider: LLMProvider | None = None) -> 
         activity_cost_per_person_inr=activity_per_person,
     )
 
-    warnings = _consistency_warnings(request, plan_days, legs, stops, budget, start.assumed)
+    warnings = _consistency_warnings(
+        request,
+        plan_days,
+        legs,
+        stops,
+        budget,
+        start.assumed,
+    )
 
     return TripPlan(
         request=request,

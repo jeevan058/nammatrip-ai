@@ -20,7 +20,7 @@ import {
   Wallet,
   Sparkles,
 } from 'lucide-react'
-import { useState, type FormEvent, type ReactNode } from 'react'
+import { useEffect, useState, type FormEvent, type ReactNode } from 'react'
 import { useLanguage } from '../i18n/LanguageContext'
 import {
   ACCOMMODATIONS,
@@ -68,6 +68,12 @@ interface FormState {
 
 type ErrorKey = 'startCity' | 'days' | 'travellers' | 'budget' | 'interests'
 type Errors = Partial<Record<ErrorKey, true>>
+
+interface LocationSuggestion {
+  label: string
+  lat: number
+  lng: number
+}
 
 const INITIAL: FormState = {
   startCity: '',
@@ -192,6 +198,79 @@ export function PlannerForm({
   const [planLang, setPlanLang] = useState<Lang | null>(null)
   const [errors, setErrors] = useState<Errors>({})
   const [attempted, setAttempted] = useState(false)
+  const [selectedLocation, setSelectedLocation] =
+    useState<LocationSuggestion | null>(null)
+  const [locationSuggestions, setLocationSuggestions] = useState<LocationSuggestion[]>([])
+  const [isSearchingLocations, setIsSearchingLocations] = useState(false)
+
+  useEffect(() => {
+    const query = form.startCity.trim()
+    if (query.length < 2 || selectedLocation?.label === query) {
+      setLocationSuggestions([])
+      setIsSearchingLocations(false)
+      return
+    }
+
+    const controller = new AbortController()
+    const timer = window.setTimeout(async () => {
+      setIsSearchingLocations(true)
+      try {
+        const params = new URLSearchParams({ q: query, limit: '6', lang: 'en' })
+        const response = await fetch(
+          `https://photon.komoot.io/api/?${params.toString()}`,
+          { signal: controller.signal },
+        )
+        if (!response.ok) throw new Error('Location search failed')
+
+        const data: {
+          features?: Array<{
+            geometry?: { coordinates?: [number, number] }
+            properties?: {
+              name?: string
+              city?: string
+              town?: string
+              village?: string
+              state?: string
+              country?: string
+            }
+          }>
+        } = await response.json()
+
+        const results = (data.features ?? []).flatMap((feature) => {
+          const coordinates = feature.geometry?.coordinates
+          const props = feature.properties
+          const name = props?.name ?? props?.city ?? props?.town ?? props?.village
+          if (!coordinates || !props || !name) return []
+
+          const area = [
+            props.city && props.city !== name ? props.city : undefined,
+            props.town && props.town !== name && props.town !== props.city ? props.town : undefined,
+            props.state,
+            props.country,
+          ].filter((part): part is string => Boolean(part))
+
+          return [{
+            label: [name, ...area].join(', '),
+            lng: coordinates[0],
+            lat: coordinates[1],
+          }]
+        })
+
+        setLocationSuggestions(results)
+      } catch (error) {
+        if (!(error instanceof DOMException && error.name === 'AbortError')) {
+          setLocationSuggestions([])
+        }
+      } finally {
+        if (!controller.signal.aborted) setIsSearchingLocations(false)
+      }
+    }, 350)
+
+    return () => {
+      window.clearTimeout(timer)
+      controller.abort()
+    }
+  }, [form.startCity, selectedLocation])
 
   const effectiveLang = planLang ?? lang
 
@@ -237,6 +316,9 @@ export function PlannerForm({
 
     onSubmit({
       start_city: form.startCity.trim(),
+      ...(selectedLocation
+        ? { start_lat: selectedLocation.lat, start_lng: selectedLocation.lng }
+        : {}),
       days: wholeNumber(form.days)!,
       travellers: wholeNumber(form.travellers)!,
       budget_inr: wholeNumber(form.budget)!,
@@ -253,6 +335,9 @@ export function PlannerForm({
     setPlanLang(null)
     setErrors({})
     setAttempted(false)
+    setSelectedLocation(null)
+    setLocationSuggestions([])
+    setIsSearchingLocations(false)
   }
 
   const hasErrors = Object.keys(errors).length > 0
@@ -318,21 +403,59 @@ export function PlannerForm({
                       error={errors.startCity ? errorText.startCity : undefined}
                       icon={<MapPin size={16} />}
                     >
-                      <input
-                        id="start-city"
-                        type="text"
-                        autoComplete="off"
-                        value={form.startCity}
-                        onChange={(event) =>
-                          update('startCity', event.target.value)
-                        }
-                        aria-invalid={errors.startCity ? true : undefined}
-                        aria-describedby={
-                          errors.startCity ? 'start-city-error' : undefined
-                        }
-                        placeholder="e.g. Bengaluru, Hassan, or your town"
-                        className={inputClass}
-                      />
+                      <div className="relative">
+                        <input
+                          id="start-city"
+                          type="text"
+                          autoComplete="off"
+                          role="combobox"
+                          aria-autocomplete="list"
+                          aria-expanded={locationSuggestions.length > 0}
+                          aria-controls="start-city-suggestions"
+                          value={form.startCity}
+                          onChange={(event) => {
+                            setSelectedLocation(null)
+                            update('startCity', event.target.value)
+                          }}
+                          aria-invalid={errors.startCity ? true : undefined}
+                          aria-describedby={
+                            errors.startCity ? 'start-city-error' : undefined
+                          }
+                          placeholder="e.g. Bengaluru, Hassan, or your town"
+                          className={inputClass}
+                        />
+                        {isSearchingLocations && (
+                          <p className="mt-2 text-xs text-[#758176]" role="status">
+                            Searching locations?
+                          </p>
+                        )}
+                        {locationSuggestions.length > 0 && (
+                          <ul
+                            id="start-city-suggestions"
+                            role="listbox"
+                            className="absolute z-30 mt-2 max-h-64 w-full overflow-y-auto rounded-xl border border-[#DCE3D8] bg-white p-1 shadow-lg"
+                          >
+                            {locationSuggestions.map((suggestion) => (
+                              <li key={`${suggestion.label}-${suggestion.lat}-${suggestion.lng}`}>
+                                <button
+                                  type="button"
+                                  role="option"
+                                  aria-selected={selectedLocation?.label === suggestion.label}
+                                  className="w-full rounded-lg px-3 py-3 text-left text-sm text-[#183A2B] hover:bg-[#F2F5EF] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#28553D]"
+                                  onClick={() => {
+                                    setSelectedLocation(suggestion)
+                                    update('startCity', suggestion.label)
+                                    setLocationSuggestions([])
+                                  }}
+                                >
+                                  <span className="block font-semibold">{suggestion.label.split(',')[0]}</span>
+                                  <span className="mt-0.5 block text-xs text-[#758176]">{suggestion.label}</span>
+                                </button>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </div>
                     </Field>
                   </div>
 
