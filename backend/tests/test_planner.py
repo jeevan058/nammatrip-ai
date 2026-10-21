@@ -235,5 +235,6 @@ def test_provider_config_from_environment(monkeypatch):
     monkeypatch.setenv("LLM_MODEL", "some-model")
     assert llm.get_provider().name == "anthropic"
     monkeypatch.setenv("LLM_PROVIDER", "openai_compatible")
+    monkeypatch.delenv("LLM_BASE_URL", raising=False)
     with pytest.raises(llm.LLMUnavailable):  # base URL missing
         llm.get_provider()
