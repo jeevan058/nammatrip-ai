@@ -112,3 +112,14 @@ Trip requests include the starting city, trip duration, budget, travellers, inte
 ## Hackathon Project
 
 NammaTrip AI — making Karnataka travel planning more accessible, personalized, and budget-conscious.
+
+## Screenshots
+
+### 1. Homepage
+<img width="1912" height="867" alt="Screenshot 2026-10-22 141351" src="https://github.com/user-attachments/assets/5e9d4d98-3df2-4c8d-852c-7286f0e907b7" />
+### 2. Trip Planner
+<img width="1916" height="872" alt="Screenshot 2026-10-22 141412" src="https://github.com/user-attachments/assets/8f1c398d-73f6-4cae-80a8-c397a720d4d2" />
+### 3. Generated Itinerary
+<img width="1887" height="862" alt="Screenshot 2026-10-22 141433" src="https://github.com/user-attachments/assets/e483a603-1ca2-4c74-85b3-6a0bd2fa581f" />
+
+
