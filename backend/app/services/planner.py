@@ -32,7 +32,7 @@ class NoDestinationsFound(Exception):
 
 
 SYSTEM_PROMPT = """You are the writing assistant of NammaTrip AI, a Karnataka travel planner.
-The route, the days and the stops are already decided by the application. Your job is only to
+The route, the days and the stops are already decided by the application. Your job is to
 write helpful, specific, friendly text for them.
 
 Rules:
@@ -43,6 +43,18 @@ Rules:
 - Use only facts from the provided destination data plus general, well-known cultural context.
 - Write in the requested output language. If it is Kannada, write in Kannada script.
 - Keep every description under 280 characters.
+- Follow the traveller's selected travel style in the summary, daily themes, activity titles,
+  activity descriptions, food suggestions and tips.
+- For "adventurous", favour active outdoor experiences, trekking, exploration and nature activities
+  supported by the provided destination data.
+- For "relaxing", favour slow-paced sightseeing, scenic viewpoints, peaceful experiences and rest.
+- For "cultural", favour heritage, architecture, local traditions and cultural experiences.
+- For "family-friendly", favour accessible activities suitable for a family trip.
+- For "romantic", favour scenic, peaceful and couple-friendly experiences.
+- For "budget-friendly", favour free or low-cost experiences supported by the destination data.
+- For other styles, follow the selected style as closely as the available destination data allows.
+- Do not invent attractions, activities or facilities that are not supported by the provided data.
+- Do not change the route, number of days or selected destinations to match a style.
 
 JSON shape:
 {"summary": str, "days": [{"day": int, "theme": str, "destination_ids": [str],
@@ -347,8 +359,8 @@ def generate_trip(
         stops=[s.destination for s in stops],
         legs=legs,
         budget=budget,
-        tips=itinerary.tips,
         warnings=warnings,
+        tips=itinerary.tips,
         source=source,
         fallback_reason=fallback_reason,
         estimates_note=DISCLAIMER,
